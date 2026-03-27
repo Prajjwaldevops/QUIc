@@ -327,7 +327,7 @@ const homePage = () => {
         <div className="hero-left">
           <div className="bit-pill">B.I.T SINDRI</div>
 
-          <h1>
+          <h1 className="title">
             <span>QUIMICA</span> 2026
           </h1>
 
@@ -392,7 +392,7 @@ const homePage = () => {
               The Chemical Engineering Society organizes an annual technical
               extravaganza at BIT Sindri.
             </p>
-            <button className="primary-btn">EXPLORE</button>
+            <button  onClick={() => navigate("/quimica25")} className="primary-btn">EXPLORE</button>
           </div>
         </div>
 
@@ -408,7 +408,7 @@ const homePage = () => {
               The Chemical Engineering Society organizes an annual technical
               extravaganza at BIT Sindri.
             </p>
-            <button className="primary-btn">EXPLORE</button>
+            <button  onClick={() => navigate("/quimica23")} className="primary-btn">EXPLORE</button>
           </div>
         </div>
       </section>

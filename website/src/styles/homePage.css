@@ -639,7 +639,8 @@ img {
 /* ================= NAVBAR ================= */
 
 .navbar {
-padding: 10px 40px; 
+  margin: 15px 10px;
+  padding: 10px 40px; 
   border: 2px solid #ff7a00;
   border-radius: 50px;
   display: flex;
@@ -746,16 +747,21 @@ width: 28px;
   gap: 40px;
 }
 
-.hero-left h1 {
-  font-size: 60px;
+.title {
+  font-size: 80px;
 }
 
 .hero-left span {
   color: #ff7a00;
 }
 
+.bit-pill{
+  margin-top: 25px;
+}
+
 .bit-pill,
 .society-pill {
+  
   border: 1px solid #ff7a00;
   padding: 6px 18px;
   border-radius: 25px;
