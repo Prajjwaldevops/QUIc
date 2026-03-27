@@ -168,23 +168,23 @@ const OurTeam = () => {
   }, []);
 
   const team = [
-    { name: "KARTIK KUMAR", post: "PRESIDENT", batch: "2k22", image: "/assets/team/kartiksir.jpeg", linkedIn: "" },
-    { name: "HARSHITA SETH", post: "VICE PRESIDENT", batch: "2k22", image: "/assets/team/harshitamam.jpeg", linkedIn: "" },
-    { name: "SOURAV KUMAR", post: "VICE PRESIDENT", batch: "2k22", image: "/assets/team/souravsir.jpeg", linkedIn: "" },
-    { name: "RAVI SHANKAR PRASAD", post: "SECRETARY", batch: "2k22", image: "/assets/team/ravisir2.jpeg", linkedIn: "" },
-    { name: "DIKSHA", post: "JOINT SECRETARY", batch: "2k22", image: "/assets/team/dikshamam.jpeg", linkedIn: "" },
-    { name: "NIDHISHREE MAHATO", post: "JOINT SECRETARY", batch: "2k22", image: "/assets/team/nidhimam.jpg", linkedIn: "" },
-    { name: "KOMAL KUMARI", post: "SCHOLASTIC HEAD", batch: "2k22", image: "/assets/team/komalmam.jpeg", linkedIn: "" },
-    { name: "RUDRANIL GANGULY", post: "SCHOLASTIC HEAD", batch: "2k22", image: "/assets/team/rudranilsir2.jpeg", linkedIn: "" },
-    { name: "SAHITYA KUMAR", post: "TREASURER", batch: "2k22", image: "/assets/team/sahityasir.jpg", linkedIn: "" },
-    { name: "AKASH NATH", post: "JOINT TREASURER", batch: "2k22", image: "/assets/team/akashsir.jpg", linkedIn: "" },
-    { name: "SOURAV OMONG", post: "JOINT TREASURER", batch: "2k22", image: "/assets/team/omangsir.jpeg", linkedIn: "" },
-    { name: "HARSH GIRI", post: "TECHNICAL HEAD", batch: "2k22", image: "/assets/team/harshsir.jpg", linkedIn: "" },
-    { name: "MANOJ MURMU", post: "DESIGN & CREATIVE HEAD", batch: "2k22", image: "/assets/team/manojsir.jpeg", linkedIn: "" },
-    { name: "DEEPTI KUMARI", post: "ALUMNI & OUTREACH HEAD", batch: "2k22", image: "/assets/team/deeptimam.jpeg", linkedIn: "" },
-    { name: "DONA BHATTACHARJEE", post: "ALUMNI & OUTREACH HEAD", batch: "2k22", image: "/assets/team/donamam.jpg", linkedIn: "" },
+    { name: "KARTIK KUMAR", post: "PRESIDENT", batch: "2k22", image: "/assets/team/kartiksir.jpeg", linkedIn: "https://www.linkedin.com/in/kartik-kumar-550933298/" },
+    { name: "HARSHITA SETH", post: "VICE PRESIDENT", batch: "2k22", image: "/assets/team/harshitamam.jpeg", linkedIn: "https://www.linkedin.com/in/harshita-seth-74b280257/" },
+    { name: "SOURAV KUMAR", post: "VICE PRESIDENT", batch: "2k22", image: "/assets/team/souravsir.jpeg", linkedIn: "https://www.linkedin.com/in/sourav-kumar-2a271a256/" },
+    { name: "RAVI SHANKAR PRASAD", post: "SECRETARY", batch: "2k22", image: "/assets/team/ravisir2.jpeg", linkedIn: "https://www.linkedin.com/in/ravi-shankar-prasad-bitsindri/" },
+    { name: "DIKSHA", post: "JOINT SECRETARY", batch: "2k22", image: "/assets/team/dikshamam.jpeg", linkedIn: "https://www.linkedin.com/in/diksha-jha-32342628b/" },
+    { name: "NIDHISHREE MAHATO", post: "JOINT SECRETARY", batch: "2k22", image: "/assets/team/nidhimam.jpg", linkedIn: "https://www.linkedin.com/in/nidhishree-mahato/" },
+    { name: "KOMAL KUMARI", post: "SCHOLASTIC HEAD", batch: "2k22", image: "/assets/team/komalmam.jpeg", linkedIn: "https://www.linkedin.com/in/komalkri08/" },
+    { name: "RUDRANIL GANGULY", post: "SCHOLASTIC HEAD", batch: "2k22", image: "/assets/team/rudranilsir2.jpeg", linkedIn: "https://www.linkedin.com/in/rudranil-ganguly-305411254/" },
+    { name: "SAHITYA KUMAR", post: "TREASURER", batch: "2k22", image: "/assets/team/sahityasir.jpg", linkedIn: "https://www.linkedin.com/in/sahitya-kumar-897a27253/" },
+    { name: "AKASH NATH", post: "JOINT TREASURER", batch: "2k22", image: "/assets/team/akashsir.jpg", linkedIn: "https://www.linkedin.com/in/theakashnath/" },
+    { name: "SOURAV OMONG", post: "JOINT TREASURER", batch: "2k22", image: "/assets/team/omangsir.jpeg", linkedIn: "https://www.linkedin.com/in/sourav-omong-51655b257/" },
+    { name: "HARSH GIRI", post: "TECHNICAL HEAD", batch: "2k22", image: "/assets/team/harshsir.jpg", linkedIn: "https://www.linkedin.com/in/harsh-giri-b84889211/" },
+    { name: "MANOJ MURMU", post: "DESIGN & CREATIVE HEAD", batch: "2k22", image: "/assets/team/manojsir.jpg", linkedIn: "https://www.linkedin.com/in/manoj-murmu/" },
+    { name: "DEEPTI KUMARI", post: "ALUMNI & OUTREACH HEAD", batch: "2k22", image: "/assets/team/deeptimam.jpeg", linkedIn: "https://www.linkedin.com/in/deepti-kumari-482049258/" },
+    { name: "DONA BHATTACHARJEE", post: "ALUMNI & OUTREACH HEAD", batch: "2k22", image: "/assets/team/donamam.jpg", linkedIn: "https://www.linkedin.com/in/dona-bhattacharjee-a95b25273/" },
     { name: "SAMRIDDHI SINGH", post: "PUBLIC RELATION OFFICER", batch: "2k22", image: "/assets/team/samriddhimam.jpg", linkedIn: "" },
-    { name: "AASHI RANI", post: "JOINT PRO", batch: "2k22", image: "/assets/team/aashimam.jpg", linkedIn: "" },
+    { name: "AASHI RANI", post: "JOINT PRO", batch: "2k22", image: "/assets/team/aashimam.jpg", linkedIn: "https://www.linkedin.com/in/aashi-rani-a6824730a/" },
   ];
 
   /* ================= SCROLL REVEAL ================= */
@@ -248,7 +248,7 @@ const OurTeam = () => {
             <p>{member.post}</p>
             <p>{member.batch}</p>
 
-            <a href={member.linkedIn} className="linkedin-icon">
+            <a href={member.linkedIn} className="linkedin-icon" target="blank">
               <FontAwesomeIcon icon={faLinkedinIn} />
             </a>
           </div>

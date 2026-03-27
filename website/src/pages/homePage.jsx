@@ -340,7 +340,7 @@ const homePage = () => {
 
         <div className="hero-right">
           <div className="poster-box">
-            <img src="/quimicaLogoWhite.png" alt="Quimica Poster" />
+            <img src="/Quimica26.jpeg" alt="Quimica Poster" />
           </div>
         </div>
       </section>
