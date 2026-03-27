@@ -1,6 +1,15 @@
 import React from "react";
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// Context
+import { AuthProvider } from './context/AuthContext';
+
+// Route guards
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminProtectedRoute from './components/AdminProtectedRoute';
+
+// Public pages
 import HomePage from './pages/homePage';
 import OurTeam from './pages/ourTeam';
 import Events from './pages/event';
@@ -9,12 +18,29 @@ import Quimica25 from "./pages/quimica25";
 import Quimica23 from "./pages/quimica23";
 import Achievements from "./pages/achievements";
 
+// Auth pages
+import Register from './pages/register';
+import SignIn from './pages/signin';
+import ForgotPassword from './pages/forgotPassword';
 
+// Protected event pages
+import Quimica26 from './pages/quimica26';
+import QuimiDexterRegister from './pages/quimiDexterRegister';
+import QuimiDexterTeamId from './pages/quimiDexterTeamId';
+import QuimiDexterSubmission from './pages/quimiDexterSubmission';
+import QuantumRegister from './pages/quantumRegister';
+import QuantumUid from './pages/quantumUid';
+
+// Admin pages
+import AdminLogin from './pages/adminLogin';
+import AdminDashboard from './pages/adminDashboard';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <Routes>
+  <AuthProvider>
+    <BrowserRouter>
+      <Routes>
+        {/* Public */}
         <Route path="/" element={<HomePage />} />
         <Route path="/ourTeam" element={<OurTeam />} />
         <Route path="/events" element={<Events />} />
@@ -22,6 +48,24 @@ root.render(
         <Route path="/quimica23" element={<Quimica23 />} />
         <Route path="/quimica25" element={<Quimica25 />} />
         <Route path="/achievements" element={<Achievements />} />
-    </Routes>
-  </BrowserRouter>
+
+        {/* Auth */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/* Protected — Quimica26 events */}
+        <Route path="/quimica26" element={<ProtectedRoute><Quimica26 /></ProtectedRoute>} />
+        <Route path="/quimica26/quimi-dexter/register" element={<ProtectedRoute><QuimiDexterRegister /></ProtectedRoute>} />
+        <Route path="/quimica26/quimi-dexter/team-id" element={<ProtectedRoute><QuimiDexterTeamId /></ProtectedRoute>} />
+        <Route path="/quimica26/quimi-dexter/submission" element={<ProtectedRoute><QuimiDexterSubmission /></ProtectedRoute>} />
+        <Route path="/quimica26/quantum/register" element={<ProtectedRoute><QuantumRegister /></ProtectedRoute>} />
+        <Route path="/quimica26/quantum/uid" element={<ProtectedRoute><QuantumUid /></ProtectedRoute>} />
+
+        {/* Admin */}
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
+      </Routes>
+    </BrowserRouter>
+  </AuthProvider>
 );

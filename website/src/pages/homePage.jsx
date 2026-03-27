@@ -335,7 +335,10 @@ const homePage = () => {
             Chemical Engineering Society
           </div>
 
-          <button className="primary-btn">REGISTER</button>
+          <div className="hero-buttons">
+            <button className="primary-btn signin-btn" onClick={() => navigate('/signin')}>SIGN IN</button>
+            <button className="primary-btn" onClick={() => navigate('/register')}>REGISTER</button>
+          </div>
         </div>
 
         <div className="hero-right">

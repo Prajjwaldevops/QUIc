@@ -839,6 +839,24 @@ width: 28px;
   transform: translateY(-2px);
 }
 
+/* Hero buttons row */
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.signin-btn {
+  background: transparent;
+  border: 2px solid #ff7a00;
+  color: #ff7a00;
+}
+
+.signin-btn:hover {
+  background: rgba(255, 122, 0, 0.12);
+  color: #ffa347;
+}
+
 /* ================= BOXES ================= */
 
 .poster-box,
