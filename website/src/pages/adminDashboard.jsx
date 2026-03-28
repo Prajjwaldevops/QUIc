@@ -26,15 +26,18 @@ const AdminDashboard = () => {
   const fetchAll = async () => {
     try {
       // Fetch users
-      const { data: usersData } = await supabase.from('users').select('*').order('created_at', { ascending: false });
+      const { data: usersData, error: usersError } = await supabase.from('users').select('*').order('created_at', { ascending: false });
+      if (usersError) console.error('Users fetch error:', usersError);
       setUsers(usersData || []);
 
       // Fetch teams
-      const { data: teamsData } = await supabase.from('quimi_dexter_teams').select('*').order('created_at', { ascending: false });
+      const { data: teamsData, error: teamsError } = await supabase.from('quimi_dexter_teams').select('*').order('created_at', { ascending: false });
+      if (teamsError) console.error('Teams fetch error:', teamsError);
       setTeams(teamsData || []);
 
       // Fetch quantum
-      const { data: quantumData } = await supabase.from('quantum_registrations').select('*').order('created_at', { ascending: false });
+      const { data: quantumData, error: quantumError } = await supabase.from('quantum_registrations').select('*').order('created_at', { ascending: false });
+      if (quantumError) console.error('Quantum fetch error:', quantumError);
       setQuantum(quantumData || []);
 
       setStats({
