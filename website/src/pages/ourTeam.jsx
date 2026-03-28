@@ -1,155 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import { NavLink, useNavigate } from "react-router-dom";
-// import "../styles/ourTeam.css";
-// import "../styles/homePage.css";
-
-// // ✅ FontAwesome
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from "@fortawesome/free-brands-svg-icons";
-
-// const OurTeam = () => {
-//   const navigate = useNavigate();
-//   const [menuOpen, setMenuOpen] = useState(false);
-
-//   useEffect(() => {
-//     window.scrollTo(0, 0);
-//   }, []);
-
-//   const team = [
-//     { name: "KARTIK KUMAR", post: "PRESIDENT", batch: "2k22", image: "/assets/team/kartiksir.jpeg", linkedIn: "" },
-//     { name: "HARSHITA SETH", post: "VICE PRESIDENT", batch: "2k22", image: "/assets/team/harshitamam.jpeg", linkedIn: "" },
-//     { name: "SOURAV KUMAR", post: "VICE PRESIDENT", batch: "2k22", image: "/assets/team/souravsir.jpeg", linkedIn: "" },
-//     { name: "RAVI SHANKAR PRASAD", post: "SECRETARY", batch: "2k22", image: "/assets/team/ravisir2.jpeg", linkedIn: "" },
-//     { name: "DIKSHA", post: "JOINT SECRETARY", batch: "2k22", image: "/assets/team/dikshamam.jpeg", linkedIn: "" },
-//     { name: "NIDHISHREE MAHATO", post: "JOINT SECRETARY", batch: "2k22", image: "/assets/team/nidhimam.jpg", linkedIn: "" },
-//     { name: "KOMAL KUMARI", post: "SCHOLASTIC HEAD", batch: "2k22", image: "/assets/team/komalmam.jpeg", linkedIn: "" },
-//     { name: "RUDRANIL GANGULY", post: "SCHOLASTIC HEAD", batch: "2k22", image: "/assets/team/rudranilsir2.jpeg", linkedIn: "" },
-//     { name: "SAHITYA KUMAR", post: "TREASURER", batch: "2k22", image: "/assets/team/sahityasir.jpg", linkedIn: "" },
-//     { name: "AKASH NATH", post: "JOINT TREASURER", batch: "2k22", image: "/assets/team/akashsir.jpg", linkedIn: "" },
-//     { name: "SOURAV OMONG", post: "JOINT TREASURER", batch: "2k22", image: "/assets/team/omangsir.jpeg", linkedIn: "" },
-//     { name: "HARSH GIRI", post: "TECHNICAL HEAD", batch: "2k22", image: "/assets/team/harshsir.jpg", linkedIn: "" },
-//     { name: "MANOJ MURMU", post: "DESIGN & CREATIVE HEAD", batch: "2k22", image: "/assets/team/kartiksir.jpg", linkedIn: "" },
-//     { name: "DEEPTI KUMARI", post: "ALUMNI & OUTREACH HEAD", batch: "2k22", image: "/assets/team/kartiksir.jpg", linkedIn: "" },
-//     { name: "DONA BHATTACHARJEE", post: "ALUMNI & OUTREACH HEAD", batch: "2k22", image: "/assets/team/donamam.jpg", linkedIn: "" },
-//     { name: "SAMRIDDHI SINGH", post: "PUBLIC RELATION OFFICER", batch: "2k22", image: "/assets/team/samriddhimam.jpg", linkedIn: "" },
-//     { name: "AASHI RANI", post: "JOINT PRO", batch: "2k22", image: "/assets/team/aashimam.jpg", linkedIn: "" },
-//   ];
-
-//   /* ================= SCROLL REVEAL ================= */
-//   useEffect(() => {
-//     const reveals = document.querySelectorAll(".reveal");
-
-//     const observer = new IntersectionObserver(
-//       (entries) => {
-//         entries.forEach((entry) => {
-//           if (entry.isIntersecting) entry.target.classList.add("active");
-//         });
-//       },
-//       { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
-//     );
-
-//     reveals.forEach((el) => observer.observe(el));
-
-//     return () => {
-//       reveals.forEach((el) => observer.unobserve(el));
-//     };
-//   }, []);
-
-//   return (
-//     <div className="homepage">
-//       {/* ================= NAVBAR ================= */}
-//       <nav className="navbar">
-//         <div className="nav-left">
-//           <img src="/quimicaLogo.png" alt="logo" />
-//           <h2>QUIMICA</h2>
-//         </div>
-
-//         {/* HAMBURGER */}
-//         <div
-//           className={`menu-icon ${menuOpen ? "open" : ""}`}
-//           onClick={() => setMenuOpen(!menuOpen)}
-//         >
-//           ☰
-//         </div>
-
-//         {/* NAV LINKS */}
-//         <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-//           <li>
-//             <NavLink to="/" onClick={() => setMenuOpen(false)}>Home</NavLink>
-//           </li>
-//           <li>
-//             <NavLink to="/events" onClick={() => setMenuOpen(false)}>Events</NavLink>
-//           </li>
-//           <li>
-//             <NavLink to="/ourTeam" onClick={() => setMenuOpen(false)}>Our Team</NavLink>
-//           </li>
-//           <li>
-//             <NavLink to="/contact" onClick={() => setMenuOpen(false)}>Contact</NavLink>
-//           </li>
-//         </ul>
-//       </nav>
-
-//       {/* ================= TEAM HERO ================= */}
-//       <section className="team-hero reveal reveal-top">
-//         <h1>Our Team</h1>
-//         <p>Meet the dedicated members of QUIMICA</p>
-//       </section>
-
-//       {/* ================= TEAM CARDS ================= */}
-//       <section className="team-container">
-//         {team.map((member, idx) => (
-//           <div className="team-card reveal reveal-left" key={idx}>
-//             <div className="card-inner">
-//               <div className="card-front">
-//                 <img src={member.image} alt={member.name} />
-//               </div>
-//               <div className="card-back">
-//                 <h3>{member.name}</h3>
-//                 <p>{member.post}</p>
-//                 <p>{member.batch}</p>
-//                 <a href={member.linkedIn} className="linkedin-icon">
-//                   <FontAwesomeIcon icon={faLinkedinIn} />
-//                 </a>
-//               </div>
-//             </div>
-//             <h3>{member.name}</h3>
-//           </div>
-//         ))}
-//       </section>
-
-//       {/* ================= FOOTER ================= */}
-//       <footer className="footer" id="contact">
-//         <div className="footer-left">
-//           <img src="/quimicaLogo.png" alt="logo" />
-//           <h4>CHEMICAL ENGINEERING SOCIETY</h4>
-//           <p>Department of Chemical Engineering</p>
-//           <p>BIT Sindri, Dhanbad</p>
-//         </div>
-
-//         <div className="footer-center">
-//           <h4>FOLLOW</h4>
-//           <div className="social-icons">
-//             <a href="#"><FontAwesomeIcon icon={faFacebookF} /></a>
-//             <a href="#"><FontAwesomeIcon icon={faLinkedinIn} /></a>
-//             <a href="#"><FontAwesomeIcon icon={faInstagram} /></a>
-//             <a href="#"><FontAwesomeIcon icon={faXTwitter} /></a>
-//           </div>
-//         </div>
-
-//         <div className="footer-right">
-//           <h4>CONTACT US</h4>
-//           <p>BIT Sindri</p>
-//           <p>Dhanbad, India - 721302</p>
-//           <p>Phone: +91-3222-255221</p>
-//         </div>
-//       </footer>
-//     </div>
-//   );
-// };
-
-// export default OurTeam;
-
-
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/ourTeam.css";
@@ -216,7 +64,6 @@ const OurTeam = () => {
           <h2>QUIMICA</h2>
         </div>
 
-        {/* HAMBURGER */}
         <div
           className={`menu-icon ${menuOpen ? "open" : ""}`}
           onClick={() => setMenuOpen(!menuOpen)}
@@ -224,7 +71,6 @@ const OurTeam = () => {
           ☰
         </div>
 
-        {/* NAV LINKS */}
         <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
           <li><NavLink to="/" onClick={() => setMenuOpen(false)}>Home</NavLink></li>
           <li><NavLink to="/events" onClick={() => setMenuOpen(false)}>Events</NavLink></li>
@@ -244,13 +90,26 @@ const OurTeam = () => {
         {team.map((member, idx) => (
           <div className="team-card reveal reveal-left" key={idx}>
             <img src={member.image} alt={member.name} />
-            <h3>{member.name}</h3>
-            <p>{member.post}</p>
-            <p>{member.batch}</p>
 
-            <a href={member.linkedIn} className="linkedin-icon" target="blank">
-              <FontAwesomeIcon icon={faLinkedinIn} />
-            </a>
+            {/* NORMAL CONTENT */}
+            <div className="team-content">
+              <h3>{member.name}</h3>
+              <p>{member.post}</p>
+              <p>{member.batch}</p>
+
+              {member.linkedIn && (
+                <a href={member.linkedIn} className="linkedin-icon" target="blank">
+                  <FontAwesomeIcon icon={faLinkedinIn} />
+                </a>
+              )}
+            </div>
+
+            {/* 🔥 HOVER OVERLAY */}
+            <div className="hover-overlay">
+              <h3>{member.name}</h3>
+              <p>{member.post}</p>
+              <p>{member.batch}</p>
+            </div>
           </div>
         ))}
       </section>

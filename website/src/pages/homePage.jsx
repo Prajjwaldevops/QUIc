@@ -247,82 +247,38 @@ import {
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 
-const homePage = () => {
+const HomePage = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div className="home">
-      {/* ================= NAVBAR ================= */}
+
+      {/* NAVBAR */}
       <nav className="navbar">
         <div className="nav-left">
           <img src="/quimicaLogoWhite.png" alt="logo" />
           <h2>QUIMICA</h2>
         </div>
 
-        {/* HAMBURGER */}
         <div
-          className={`menu-icon ${menuOpen ? "open" : ""}`}
+          className="menu-icon"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           ☰
         </div>
 
-        {/* NAV LINKS */}
         <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-          <li>
-            <NavLink
-              to="/"
-              className={({ isActive }) => (isActive ? "active-link" : "")}
-              onClick={() => setMenuOpen(false)}
-            >
-              Home
-            </NavLink>
-          </li>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
 
-          <li>
-            <NavLink
-              to="#about"
-              className={({ isActive }) => (isActive ? "active-link" : "")}
-              onClick={() => setMenuOpen(false)}
-            >
-              About
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="/events"
-              className={({ isActive }) => (isActive ? "active-link" : "")}
-              onClick={() => setMenuOpen(false)}
-            >
-              Events
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="/ourTeam"
-              className={({ isActive }) => (isActive ? "active-link" : "")}
-              onClick={() => setMenuOpen(false)}
-            >
-              Our Team
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="/contact"
-              className={({ isActive }) => (isActive ? "active-link" : "")}
-              onClick={() => setMenuOpen(false)}
-            >
-              Contact
-            </NavLink>
-          </li>
+          <li><NavLink to="/events">Events</NavLink></li>
+          <li><NavLink to="/ourTeam">Our Team</NavLink></li>
+          <li><NavLink to="/contact">Contact</NavLink></li>
         </ul>
       </nav>
 
-      {/* ================= HERO ================= */}
+      {/* HERO */}
       <section className="hero" id="home">
         <div className="hero-left">
           <div className="bit-pill">B.I.T SINDRI</div>
@@ -336,19 +292,30 @@ const homePage = () => {
           </div>
 
           <div className="hero-buttons">
-            <button className="primary-btn signin-btn" onClick={() => navigate('/signin')}>SIGN IN</button>
-            <button className="primary-btn" onClick={() => navigate('/register')}>REGISTER</button>
+            <button
+              className="primary-btn signin-btn"
+              onClick={() => navigate("/signin")}
+            >
+              SIGN IN
+            </button>
+
+            <button
+              className="primary-btn"
+              onClick={() => navigate("/register")}
+            >
+              REGISTER
+            </button>
           </div>
         </div>
 
         <div className="hero-right">
           <div className="poster-box">
-            <img src="/Quimica26.jpeg" alt="Quimica Poster" />
+           <img src="/assets/department2.png" alt="BIT Sindri" />
           </div>
         </div>
       </section>
 
-      {/* ================= ABOUT ================= */}
+      {/* ABOUT */}
       <section className="about" id="about">
         <h2 className="section-title">ABOUT US</h2>
 
@@ -379,11 +346,11 @@ const homePage = () => {
         </div>
       </section>
 
-      {/* ================= EVENTS ================= */}
+      {/* EVENTS */}
       <section className="events">
         <h2 className="section-title">OUR EVENTS</h2>
 
-        {/* 25 */}
+        {/* QUIMICA 25 */}
         <div className="event-container">
           <div className="event-poster">
             <img src="/assets/Quimica25.jpg" alt="Quimica 25" />
@@ -395,14 +362,20 @@ const homePage = () => {
               The Chemical Engineering Society organizes an annual technical
               extravaganza at BIT Sindri.
             </p>
-            <button  onClick={() => navigate("/quimica25")} className="primary-btn">EXPLORE</button>
+
+            <button
+              className="primary-btn"
+              onClick={() => navigate("/quimica25")}
+            >
+              EXPLORE
+            </button>
           </div>
         </div>
 
-        {/* 23 */}
+        {/* QUIMICA 23 */}
         <div className="event-container">
           <div className="event-poster">
-            <img src="/assets/Quimica23.jpg" alt="Quimica 25" />
+            <img src="/assets/Quimica23.jpg" alt="Quimica 23" />
           </div>
 
           <div className="event-details">
@@ -411,13 +384,19 @@ const homePage = () => {
               The Chemical Engineering Society organizes an annual technical
               extravaganza at BIT Sindri.
             </p>
-            <button  onClick={() => navigate("/quimica23")} className="primary-btn">EXPLORE</button>
+
+            <button
+              className="primary-btn"
+              onClick={() => navigate("/quimica23")}
+            >
+              EXPLORE
+            </button>
           </div>
         </div>
       </section>
 
-      {/* ================= FOOTER ================= */}
-      <footer className="footer" id="contact">
+      {/* FOOTER */}
+      <footer className="footer">
         <div className="footer-left">
           <img src="/quimicaLogoWhite.png" alt="logo" />
           <h4>CHEMICAL ENGINEERING SOCIETY</h4>
@@ -442,4 +421,4 @@ const homePage = () => {
   );
 };
 
-export default homePage;
+export default HomePage;
