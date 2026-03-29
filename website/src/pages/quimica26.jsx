@@ -154,7 +154,7 @@ const Quimica26 = () => {
         <div className="q26-card">
           <div className="q26-card-img" style={{ position: 'relative' }}>
             {quantumActive ? (
-              <img src="/assets/Quimica23.jpg" alt="Quantum" />
+              <img src=" " alt="Quantum" />
             ) : (
               <div style={{
                 position: 'absolute',
@@ -175,10 +175,10 @@ const Quimica26 = () => {
               </div>
             )}
             {/* Keeping the image underneath if needed, but heavily darkened if not active */}
-            <img src="/assets/Quimica23.jpg" alt="Quantum" style={{ opacity: quantumActive ? 1 : 0.1 }} />
+            <img src=" " alt="Quantum" style={{ opacity: quantumActive ? 1 : 0.1 }} />
           </div>
           <h3>Quantum</h3>
-          <p>Solo event. Test your individual knowledge and skills in chemical engineering.</p>
+          <p> Coming Soon </p>
           <div className="q26-card-actions">
             {quantumActive ? (
               <button className="q26-btn q26-btn-primary" onClick={handleQuantumRegister}>
