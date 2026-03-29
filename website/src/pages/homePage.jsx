@@ -175,14 +175,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/homePage.css";
 import Footer from "./footer";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookF,
-  faLinkedinIn,
-  faInstagram,
-  faXTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-
 const HomePage = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -209,7 +201,7 @@ const HomePage = () => {
           <li><a href="#about">About</a></li>
           <li><NavLink to="/events">Events</NavLink></li>
           <li><NavLink to="/ourTeam">Our Team</NavLink></li>
-          <li><NavLink to="/contact">Faculty</NavLink></li>
+          <li><NavLink to="/faculty">Faculty</NavLink></li>
           <li><NavLink to="/newsletter">Newsletter</NavLink></li>
         </ul>
       </nav>

@@ -19,7 +19,7 @@
   text-align: center;
   margin-top: 60px;
   padding: 80px 20px;
-  background: linear-gradient(135deg, #1e293b, #0f172a);
+  background: linear-gradient(135deg, #0e0601, #050200);
   color: white;
 }
 
@@ -201,8 +201,8 @@
   right: 15px;
   background: #0077b5;
   color: white;
-  width: 35px;
-  height: 35px;
+  width: 27px;
+  height: 27px;
   border-radius: 50%;
   display: flex;
   justify-content: center;

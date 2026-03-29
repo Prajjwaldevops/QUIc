@@ -19,8 +19,7 @@
   text-align: center;
   margin-top: 60px;
   padding: 100px 20px;
-  background: linear-gradient(135deg, #b54a0e, #e4621b);
-  color: white;
+  background: linear-gradient(135deg, #0e0601, #050200);
 }
 
 .team-hero h1 {
@@ -98,13 +97,14 @@
 }
 
 /* ================= TEXT ================= */
-.team-card h3 {
+.team-card .team-content h3 {
+  color: white;
   font-size: 12px !important;
 }
 
-.team-card p {
-    font-size: 10px !important;
-  color: #cbd5f5;
+.team-card .team-content p {
+  font-size: 10px !important;
+  color: #ffffff;
 }
 .team-card {
   background: #070a0c !important; /* 🔥 NEW COLOR */

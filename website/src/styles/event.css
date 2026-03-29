@@ -42,7 +42,7 @@
   text-align: center;
   margin-top: 60px;
   padding: 100px 20px;
-  background: linear-gradient(135deg, #b54a0e, #e4621b);
+  background: linear-gradient(135deg, #0e0601, #050200);
   color: white;
 }
 
@@ -91,7 +91,7 @@
 .all-events-btn {
   padding: 10px 18px;
   border-radius: 8px;
-  background: #1f2f46;
+  background: #792E05;
   color: white;
   text-decoration: none;
   font-weight: 600;
@@ -142,18 +142,23 @@
   font-size: 0.9rem;   /* reduced */
 }
 
-.featured-info button {
+.featured-event .featured-info button {
   margin-top: 15px;
-  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  background: linear-gradient(to right, #792E05, #4e290d);
   border: none;
   color: white;
-padding: 8px 18px;
+  padding: 10px 20px;
   border-radius: 8px;
-    font-size: 0.9rem;
+  font-size: 1.2rem;
   cursor: pointer;
 }
 
 /* ================= GRID ================= */
+
+#allevents {
+  text-align: center;
+}
+
 .event-grid {
   max-width: 1000px;
   margin: 60px auto;

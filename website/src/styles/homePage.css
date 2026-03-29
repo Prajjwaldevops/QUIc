@@ -375,24 +375,6 @@ img {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  *{
   margin: 0;
   padding: 0;
@@ -429,9 +411,6 @@ img {
   background: #0b0603;
   box-shadow: 1 0 20px rgba(255, 122, 0, 0.3);
 }
-
-
-
 
 
 
@@ -779,6 +758,13 @@ background: black;
 /* ================= SMALL MOBILE ================= */
 
 @media (max-width: 480px) {
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
   .title {
     font-size: 28px;

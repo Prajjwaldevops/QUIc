@@ -26,7 +26,7 @@ import "../styles/navbar.css";
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink to="/events">Events</NavLink></li>
           <li><NavLink to="/ourTeam">Our Team</NavLink></li>
-          <li><NavLink to="/contact">Faculty</NavLink></li>
+          <li><NavLink to="/faculty">Faculty</NavLink></li>
           <li><NavLink to="/newsletter">Newsletter</NavLink></li>
         </ul>
       </nav>

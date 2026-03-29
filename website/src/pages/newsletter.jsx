@@ -119,9 +119,9 @@ useEffect(() => {
           for chemical engineering enthusiasts!
         </p>
       </section> */}
-           <section className="team-hero reveal reveal-top">
+        <section className="team-hero reveal reveal-top">
         <h1>Our Exciting magazine</h1>
-        <p>            Join us for a series of competitions, workshops, and quizzes designed
+        <p>Join us for a series of competitions, workshops, and quizzes designed
           for chemical engineering enthusiasts!</p>
       </section>
 

@@ -18,7 +18,7 @@ import Footer from "./pages/footer";
 import HomePage from './pages/homePage';
 import OurTeam from './pages/ourTeam';
 import Events from './pages/event';
-import Contact from './pages/contact';
+import Faculty from './pages/faculty';
 import Quimica25 from "./pages/quimica25";
 import Quimica23 from "./pages/quimica23";
 import Newsletter from "./pages/newsletter";
@@ -58,7 +58,7 @@ root.render(
           <Route path="/" element={<HomePage />} />
           <Route path="/ourTeam" element={<OurTeam />} />
           <Route path="/events" element={<Events />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/faculty" element={<Faculty />} />
           <Route path="/quimica23" element={<Quimica23 />} />
           <Route path="/quimica25" element={<Quimica25 />} />
           <Route path="/achievements" element={<Achievements />} />

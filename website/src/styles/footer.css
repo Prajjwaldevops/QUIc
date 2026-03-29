@@ -19,7 +19,9 @@
 }
 
 
-
+.footer-right {
+  margin-right: 5%;
+}
 
 /* ================= MOBILE ================= */
 @media (max-width: 768px) {

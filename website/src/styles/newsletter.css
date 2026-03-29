@@ -28,6 +28,14 @@
   margin: 3rem 0;
 }
 
+.team-hero{
+  text-align: center;
+  margin-top: 60px;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #0e0601, #050200);
+  color: white;
+}
+
 .hero h1 {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
