@@ -93,9 +93,9 @@ const SignIn = () => {
         await setActive({ session: result.createdSessionId });
         // Let the useEffect hook handle navigation once AuthContext synchronizes!
       } else if (result.status === 'needs_first_factor') {
-        setError('Additional verification required. Please check your email.');
+        setError(`Additional verification required. Clerk requires: ${JSON.stringify(result.supportedFirstFactors)}`);
       } else if (result.status === 'needs_second_factor') {
-        setError('Two-factor authentication required.');
+        setError(`MFA is blocking this. Clerk officially demands: ${JSON.stringify(result.supportedSecondFactors)}`);
       } else {
         setError('Sign in failed. Please try again.');
       }
