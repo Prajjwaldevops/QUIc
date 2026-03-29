@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useSignIn } from '@clerk/clerk-react';
 import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabase';
 import '../styles/auth.css';
 import '../styles/homePage.css';
 import Navbar from "./navbar";
 
+// Utility for hashing passwords locally using Web Crypto API
+const hashPassword = async (password) => {
+  const msgUint8 = new TextEncoder().encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+};
+
 const SignIn = () => {
   const navigate = useNavigate();
-  const { userProfile, signIn } = useAuth();
+  const { userProfile } = useAuth();
+  const { isLoaded, signIn, setActive } = useSignIn();
+
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -25,6 +37,11 @@ const SignIn = () => {
     e.preventDefault();
     setError('');
 
+    if (!isLoaded) {
+      setError('Authentication is loading. Please wait...');
+      return;
+    }
+
     if (!emailOrPhone) {
       setError('Please enter your email or phone number.');
       return;
@@ -37,16 +54,65 @@ const SignIn = () => {
 
     setLoading(true);
 
-    const { data, error: signInError } = await signIn(emailOrPhone, password);
+    try {
+      let identifier = emailOrPhone.trim().toLowerCase();
+      const isPhone = /^\d{10}$/.test(identifier);
 
-    if (signInError) {
-      setError(signInError);
-      setLoading(false);
-      return;
+      // Fetch user from Supabase 
+      const { data: userData } = await supabase
+        .from('users')
+        .select('email, password_hash')
+        .eq(isPhone ? 'phone' : 'email', identifier)
+        .single();
+
+      if (!userData) {
+        setError('No account found with these details. Please register first.');
+        setLoading(false);
+        return;
+      }
+      
+      identifier = userData.email;
+
+      // 1) First Auth Layer: Supabase stored password hash check
+      if (userData.password_hash) {
+        const inputHash = await hashPassword(password);
+        if (inputHash !== userData.password_hash) {
+          setError('Incorrect password.');
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Sign in with Clerk
+      const result = await signIn.create({
+        identifier: identifier,
+        password: password,
+      });
+
+      if (result.status === 'complete') {
+        // Set the active Clerk session
+        await setActive({ session: result.createdSessionId });
+        // Let the useEffect hook handle navigation once AuthContext synchronizes!
+      } else if (result.status === 'needs_first_factor') {
+        setError(`Additional verification required. Clerk requires: ${JSON.stringify(result.supportedFirstFactors)}`);
+      } else if (result.status === 'needs_second_factor') {
+        setError(`MFA is blocking this. Clerk officially demands: ${JSON.stringify(result.supportedSecondFactors)}`);
+      } else {
+        setError('Sign in failed. Please try again.');
+      }
+    } catch (err) {
+      const clerkError = err?.errors?.[0]?.longMessage || err?.errors?.[0]?.message || err?.message || 'Sign in failed. Please try again.';
+
+      // Map Clerk errors to user-friendly messages
+      if (clerkError?.includes('identifier') || clerkError?.includes('not found')) {
+        setError('No account found with this email. Please register first.');
+      } else if (clerkError?.includes('password')) {
+        setError('Incorrect password. Please try again.');
+      } else {
+        setError(clerkError);
+      }
     }
 
-    // Success → navigate to events
-    navigate('/quimica26', { replace: true });
     setLoading(false);
   };
 

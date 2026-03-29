@@ -3,9 +3,10 @@
 -- Run this in your Supabase SQL Editor
 -- ============================================================
 
--- 1. USERS TABLE (with password and batch)
+-- 1. USERS TABLE (with Clerk auth and batch)
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clerk_id TEXT UNIQUE,
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   phone TEXT UNIQUE NOT NULL,
@@ -17,6 +18,9 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
+
+-- Index on clerk_id for fast lookups
+CREATE INDEX IF NOT EXISTS idx_users_clerk_id ON users(clerk_id);
 
 -- 2. QUIMI DEXTER TEAMS
 CREATE TABLE IF NOT EXISTS quimi_dexter_teams (
@@ -149,8 +153,5 @@ CREATE POLICY "Anon read quantum counter" ON quantum_uid_counter FOR SELECT TO a
 CREATE POLICY "Anon update quantum counter" ON quantum_uid_counter FOR UPDATE TO anon USING (true);
 
 -- ============================================================
--- IF UPDATING EXISTING SCHEMA, run these ALTER statements:
+-- IF UPDATING EXISTING SCHEMA, run clerk_migration.sql instead
 -- ============================================================
--- ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash TEXT NOT NULL DEFAULT '';
--- ALTER TABLE users ADD COLUMN IF NOT EXISTS batch TEXT NOT NULL DEFAULT '2K25' CHECK (batch IN ('2K23', '2K24', '2K25'));
--- ALTER TABLE users DROP COLUMN IF EXISTS auth_id;

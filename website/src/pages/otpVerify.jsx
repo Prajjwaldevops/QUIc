@@ -1,16 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useSignUp } from '@clerk/clerk-react';
 import { useAuth } from '../context/AuthContext';
-import { supabase } from '../lib/supabase';
 import '../styles/auth.css';
 import '../styles/homePage.css';
 import Navbar from "./navbar";
 
-const OtpVerify = () => {
+const VerifyEmail = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { verifySignupOtp } = useAuth();
+  const { isLoaded, signUp, setActive } = useSignUp();
+  const { insertProfile } = useAuth();
+
   const email = location.state?.email;
+  const formData = location.state?.formData;
 
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
@@ -19,12 +22,12 @@ const OtpVerify = () => {
   const [canResend, setCanResend] = useState(false);
   const inputRefs = useRef([]);
 
-  // Redirect if no email
+  // Redirect if no email/formData
   useEffect(() => {
-    if (!email) {
+    if (!email || !formData) {
       navigate('/register');
     }
-  }, [email, navigate]);
+  }, [email, formData, navigate]);
 
   // Timer countdown
   useEffect(() => {
@@ -68,20 +71,27 @@ const OtpVerify = () => {
   };
 
   const handleResend = async () => {
+    if (!isLoaded || !signUp) return;
     setError('');
     setCanResend(false);
     setTimer(60);
-    // Resend by calling signUp again (Supabase will resend OTP)
-    const { error } = await supabase.auth.resend({
-      type: 'signup',
-      email,
-    });
-    if (error) setError(error.message);
+
+    try {
+      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+    } catch (err) {
+      const msg = err?.errors?.[0]?.longMessage || err?.errors?.[0]?.message || 'Failed to resend code.';
+      setError(msg);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (!isLoaded || !signUp) {
+      setError('Authentication is loading. Please wait...');
+      return;
+    }
 
     const token = otp.join('');
     if (token.length !== 6) {
@@ -92,32 +102,36 @@ const OtpVerify = () => {
     setLoading(true);
 
     try {
-      const { data, error: verifyError } = await verifySignupOtp(email, token);
-      if (verifyError) {
-        setError(verifyError.message || 'Invalid OTP. Please try again.');
-        setLoading(false);
-        return;
-      }
+      // Step 1: Verify the email OTP with Clerk
+      const result = await signUp.attemptEmailAddressVerification({ code: token });
 
-      // Link auth_id to users table if not already linked
-      if (data?.user) {
-        await supabase
-          .from('users')
-          .update({ auth_id: data.user.id })
-          .eq('email', email);
-      }
+      if (result.status === 'complete') {
+        // Step 2: Set the active Clerk session
+        await setActive({ session: result.createdSessionId });
 
-      // Navigate to event page
-      navigate('/quimica26', { replace: true });
+        // Step 3: Insert user profile into Supabase
+        const { error: profileError } = await insertProfile(formData, result.createdUserId);
+
+        if (profileError) {
+          setError(profileError);
+          setLoading(false);
+          return;
+        }
+
+        // Step 4: Navigate to event page
+        navigate('/quimica26', { replace: true });
+      } else {
+        setError('Verification not complete. Please try again.');
+      }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
-      console.error(err);
+      const msg = err?.errors?.[0]?.longMessage || err?.errors?.[0]?.message || 'Invalid OTP. Please try again.';
+      setError(msg);
     }
 
     setLoading(false);
   };
 
-  if (!email) return null;
+  if (!email || !formData) return null;
 
   return (
     <div className="auth-page">
@@ -214,4 +228,4 @@ const OtpVerify = () => {
   );
 };
 
-export default OtpVerify;
+export default VerifyEmail;

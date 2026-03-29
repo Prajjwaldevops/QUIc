@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useSignUp, useClerk } from '@clerk/clerk-react';
 import { useAuth } from '../context/AuthContext';
 import '../styles/auth.css';
 import '../styles/homePage.css';
@@ -18,12 +19,22 @@ const BRANCHES = [
   'Civil',
   'Production',
 ];
-
 const BATCHES = ['2K23', '2K24', '2K25'];
+
+// Utility for hashing passwords locally using Web Crypto API
+const hashPassword = async (password) => {
+  const msgUint8 = new TextEncoder().encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+};
 
 const Register = () => {
   const navigate = useNavigate();
-  const { userProfile, register } = useAuth();
+  const { userProfile } = useAuth();
+  const { isLoaded, signUp } = useSignUp();
+  const { signOut, user: clerkUser } = useClerk();
+
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -41,12 +52,15 @@ const Register = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // If already signed in, redirect to event page
+  // If already fully signed in (has profile), redirect to event page.
+  // If partially signed in (has Clerk auth but no Supabase profile), sign out to allow fresh registration.
   useEffect(() => {
     if (userProfile) {
       navigate('/quimica26', { replace: true });
+    } else if (clerkUser) {
+      signOut();
     }
-  }, [userProfile, navigate]);
+  }, [userProfile, clerkUser, navigate, signOut]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -64,6 +78,11 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (!isLoaded) {
+      setError('Authentication is loading. Please wait...');
+      return;
+    }
 
     // Basic validation
     const required = ['name', 'email', 'phone', 'branch', 'gender', 'roll_number', 'registration_number', 'batch', 'password', 'confirmPassword'];
@@ -87,6 +106,17 @@ const Register = () => {
       return;
     }
 
+    // Roll and Registration number format (Digits only)
+    if (!/^\d+$/.test(form.roll_number)) {
+      setError('Roll number must contain only numbers (no letters or special characters).');
+      return;
+    }
+
+    if (!/^\d+$/.test(form.registration_number)) {
+      setError('Registration number must contain only numbers (no letters or special characters).');
+      return;
+    }
+
     // Password strength
     if (!allPasswordChecks) {
       setError('Password does not meet all requirements.');
@@ -101,16 +131,43 @@ const Register = () => {
 
     setLoading(true);
 
-    const { data, error: regError } = await register(form);
+    try {
+      // Step 1: Create the user in Clerk with email + password
+      await signUp.create({
+        emailAddress: form.email.trim().toLowerCase(),
+        password: form.password,
+      });
 
-    if (regError) {
-      setError(regError);
-      setLoading(false);
-      return;
+      // Hash the password locally to store in Supabase for dual-verification
+      const passwordHash = await hashPassword(form.password);
+
+      // Step 2: Send email verification code (OTP)
+      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+
+      // Step 3: Navigate to OTP verification page, passing form data
+      navigate('/verify-email', {
+        state: {
+          email: form.email.trim().toLowerCase(),
+          formData: {
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            branch: form.branch,
+            gender: form.gender,
+            roll_number: form.roll_number,
+            registration_number: form.registration_number,
+            batch: form.batch,
+            password_hash: passwordHash,
+          },
+        },
+      });
+    } catch (err) {
+      // Parse Clerk error messages
+      console.error('Clerk registration error:', err);
+      const clerkError = err?.errors?.[0]?.longMessage || err?.errors?.[0]?.message || err?.message || 'Registration failed. Please try again.';
+      setError(clerkError);
     }
 
-    // Registration successful → go to event page
-    navigate('/quimica26', { replace: true });
     setLoading(false);
   };
 

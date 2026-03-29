@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useUser, useClerk } from '@clerk/clerk-react';
 import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext(null);
@@ -9,51 +10,35 @@ export const useAuth = () => {
   return ctx;
 };
 
-// Simple SHA-256 hash using Web Crypto API
-const hashPassword = async (password) => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-};
-
-const SESSION_KEY = 'quimica_session';
-
 export const AuthProvider = ({ children }) => {
+  const { isLoaded: clerkLoaded, isSignedIn, user: clerkUser } = useUser();
+  const { signOut: clerkSignOut } = useClerk();
+
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // On mount, check if session exists in localStorage
+  // When Clerk auth state changes, fetch/clear Supabase profile
   useEffect(() => {
-    const stored = localStorage.getItem(SESSION_KEY);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        // Verify session is still valid (check expiry)
-        if (parsed.email && parsed.expiry && Date.now() < parsed.expiry) {
-          // Fetch fresh profile from DB
-          fetchProfile(parsed.email).then((profile) => {
-            if (profile) {
-              setUserProfile(profile);
-            } else {
-              // Profile not found, clear session
-              localStorage.removeItem(SESSION_KEY);
-            }
-            setLoading(false);
-          });
-          return;
-        } else {
-          localStorage.removeItem(SESSION_KEY);
-        }
-      } catch {
-        localStorage.removeItem(SESSION_KEY);
-      }
-    }
-    setLoading(false);
-  }, []);
+    if (!clerkLoaded) return;
 
-  // Fetch user profile from users table
+    if (isSignedIn && clerkUser) {
+      const email = clerkUser.primaryEmailAddress?.emailAddress;
+      if (email) {
+        setLoading(true); // <-- FIX: Pause routing until we have the Supabase profile
+        fetchProfile(email).then((profile) => {
+          setUserProfile(profile);
+          setLoading(false);
+        });
+      } else {
+        setLoading(false);
+      }
+    } else {
+      setUserProfile(null);
+      setLoading(false);
+    }
+  }, [clerkLoaded, isSignedIn, clerkUser]);
+
+  // Fetch user profile from Supabase users table
   const fetchProfile = async (email) => {
     const { data, error } = await supabase
       .from('users')
@@ -64,11 +49,9 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  // Register a new user
-  const register = async (formData) => {
-    const passwordHash = await hashPassword(formData.password);
-
-    // Check uniqueness
+  // Insert profile into Supabase after Clerk registration + OTP verification
+  const insertProfile = async (formData, clerkUserId) => {
+    // Check uniqueness before inserting
     const checks = [
       { field: 'email', value: formData.email.trim().toLowerCase(), label: 'Email' },
       { field: 'phone', value: formData.phone.trim(), label: 'Phone number' },
@@ -84,14 +67,14 @@ export const AuthProvider = ({ children }) => {
         .single();
 
       if (existing) {
-        return { error: `${check.label} "${check.value}" is already registered. Please sign in instead.` };
+        return { error: `${check.label} "${check.value}" is already registered.` };
       }
     }
 
-    // Insert user
     const { data, error } = await supabase
       .from('users')
       .insert({
+        clerk_id: clerkUserId,
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
         phone: formData.phone.trim(),
@@ -100,85 +83,44 @@ export const AuthProvider = ({ children }) => {
         roll_number: formData.roll_number.trim().toUpperCase(),
         registration_number: formData.registration_number.trim().toUpperCase(),
         batch: formData.batch,
-        password_hash: passwordHash,
+        password_hash: formData.password_hash || '',
       })
       .select()
       .single();
 
     if (error) {
       if (error.message.includes('duplicate')) {
-        return { error: 'An account with these details already exists. Please sign in.' };
+        return { error: 'An account with these details already exists.' };
       }
       return { error: error.message };
     }
 
-    // Save session
-    saveSession(data);
     setUserProfile(data);
     return { data, error: null };
   };
 
-  // Sign in with email/phone + password
-  const signIn = async (emailOrPhone, password) => {
-    const passwordHash = await hashPassword(password);
-
-    let email = emailOrPhone.trim().toLowerCase();
-
-    // If input is a phone number, look up the email
-    const isPhone = /^\d{10}$/.test(emailOrPhone.trim());
-    if (isPhone) {
-      const { data: userData } = await supabase
-        .from('users')
-        .select('email')
-        .eq('phone', emailOrPhone.trim())
-        .single();
-
-      if (!userData) {
-        return { error: 'No account found with this phone number.' };
+  // Refresh the profile from Supabase (after profile changes)
+  const refreshProfile = async () => {
+    if (clerkUser) {
+      const email = clerkUser.primaryEmailAddress?.emailAddress;
+      if (email) {
+        const profile = await fetchProfile(email);
+        setUserProfile(profile);
+        return profile;
       }
-      email = userData.email;
     }
-
-    // Fetch user and verify password
-    const { data: user } = await supabase
-      .from('users')
-      .select('*')
-      .eq('email', email)
-      .single();
-
-    if (!user) {
-      return { error: 'No account found with this email. Please register first.' };
-    }
-
-    if (user.password_hash !== passwordHash) {
-      return { error: 'Incorrect password. Please try again.' };
-    }
-
-    // Save session
-    saveSession(user);
-    setUserProfile(user);
-    return { data: user, error: null };
+    return null;
   };
 
-  // Save session to localStorage (30-day expiry)
-  const saveSession = (user) => {
-    const session = {
-      email: user.email,
-      name: user.name,
-      expiry: Date.now() + 30 * 24 * 60 * 60 * 1000, // 30 days
-    };
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  };
-
-  // Sign out
-  const signOut = () => {
-    localStorage.removeItem(SESSION_KEY);
+  // Sign out — clears Clerk session
+  const signOut = async () => {
+    await clerkSignOut();
     setUserProfile(null);
   };
 
-  // Check if user is signed in
-  const isSignedIn = () => {
-    return !!userProfile;
+  // Check if user is signed in (both Clerk auth + Supabase profile)
+  const isAuthenticated = () => {
+    return isSignedIn && !!userProfile;
   };
 
   return (
@@ -186,11 +128,13 @@ export const AuthProvider = ({ children }) => {
       value={{
         userProfile,
         loading,
-        register,
-        signIn,
+        isSignedIn: isAuthenticated,
+        clerkUser,
+        clerkLoaded,
+        insertProfile,
+        refreshProfile,
         signOut,
-        isSignedIn,
-        hashPassword,
+        fetchProfile,
       }}
     >
       {children}

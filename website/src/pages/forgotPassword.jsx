@@ -1,22 +1,31 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSignIn } from '@clerk/clerk-react';
 import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
 import '../styles/auth.css';
 import '../styles/homePage.css';
 import Navbar from "./navbar";
 
+// Utility for hashing passwords locally using Web Crypto API
+const hashPassword = async (password) => {
+  const msgUint8 = new TextEncoder().encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+};
+
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const { hashPassword } = useAuth();
-  const [step, setStep] = useState('email'); // 'email' | 'reset'
+  const { isLoaded, signIn, setActive } = useSignIn();
+
+  // Steps: 'email' → 'code' → 'reset' → 'success'
+  const [step, setStep] = useState('email');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // Password strength checks
@@ -28,40 +37,79 @@ const ForgotPassword = () => {
   };
   const allPasswordChecks = Object.values(passwordChecks).every(Boolean);
 
-  const handleVerifyIdentity = async (e) => {
+  // Step 1: Send reset code to email
+  const handleSendCode = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (!isLoaded) {
+      setError('Authentication is loading. Please wait...');
+      return;
+    }
 
     if (!email) {
       setError('Please enter your email address.');
       return;
     }
 
-    if (!phone) {
-      setError('Please enter your phone number.');
+    setLoading(true);
+
+    try {
+      // Create a sign-in attempt and request password reset code
+      const result = await signIn.create({
+        strategy: 'reset_password_email_code',
+        identifier: email.trim().toLowerCase(),
+      });
+
+      if (result.status === 'needs_first_factor') {
+        setStep('code');
+      } else {
+        setError('Unable to send reset code. Please check your email and try again.');
+      }
+    } catch (err) {
+      const msg = err?.errors?.[0]?.longMessage || err?.errors?.[0]?.message || 'Failed to send reset code.';
+      if (msg?.includes('identifier') || msg?.includes('not found')) {
+        setError('No account found with this email address.');
+      } else {
+        setError(msg);
+      }
+    }
+
+    setLoading(false);
+  };
+
+  // Step 2: Verify the OTP code
+  const handleVerifyCode = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!code || code.length < 6) {
+      setError('Please enter the complete 6-digit code.');
       return;
     }
 
     setLoading(true);
 
-    // Verify email + phone combination exists
-    const { data: user } = await supabase
-      .from('users')
-      .select('email, phone')
-      .eq('email', email.trim().toLowerCase())
-      .eq('phone', phone.trim())
-      .single();
+    try {
+      const result = await signIn.attemptFirstFactor({
+        strategy: 'reset_password_email_code',
+        code: code,
+      });
 
-    if (!user) {
-      setError('No account found with this email and phone number combination.');
-      setLoading(false);
-      return;
+      if (result.status === 'needs_new_password') {
+        setStep('reset');
+      } else {
+        setError('Invalid code. Please try again.');
+      }
+    } catch (err) {
+      const msg = err?.errors?.[0]?.longMessage || err?.errors?.[0]?.message || 'Invalid code. Please try again.';
+      setError(msg);
     }
 
-    setStep('reset');
     setLoading(false);
   };
 
+  // Step 3: Set new password
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setError('');
@@ -78,24 +126,49 @@ const ForgotPassword = () => {
 
     setLoading(true);
 
-    const passwordHash = await hashPassword(password);
+    try {
+      const result = await signIn.resetPassword({
+        password: password,
+      });
 
-    const { error: updateError } = await supabase
-      .from('users')
-      .update({ password_hash: passwordHash })
-      .eq('email', email.trim().toLowerCase());
+      if (result.status === 'complete') {
+        // Sync the new password hash to Supabase for dual-verification
+        const newPasswordHash = await hashPassword(password);
+        await supabase
+          .from('users')
+          .update({ password_hash: newPasswordHash })
+          .eq('email', email.trim().toLowerCase());
 
-    if (updateError) {
-      setError(updateError.message);
-      setLoading(false);
-      return;
+        await setActive({ session: result.createdSessionId });
+        setStep('success');
+        // Redirect to events after 3 seconds
+        setTimeout(() => navigate('/quimica26', { replace: true }), 3000);
+      } else {
+        setError('Password reset failed. Please try again.');
+      }
+    } catch (err) {
+      const msg = err?.errors?.[0]?.longMessage || err?.errors?.[0]?.message || 'Password reset failed.';
+      setError(msg);
     }
 
-    setSuccess(true);
     setLoading(false);
+  };
 
-    // Redirect to sign in after 3 seconds
-    setTimeout(() => navigate('/signin', { replace: true }), 3000);
+  // Handle resending the code
+  const handleResendCode = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      await signIn.create({
+        strategy: 'reset_password_email_code',
+        identifier: email.trim().toLowerCase(),
+      });
+      setError('');
+    } catch (err) {
+      const msg = err?.errors?.[0]?.longMessage || err?.errors?.[0]?.message || 'Failed to resend code.';
+      setError(msg);
+    }
+    setLoading(false);
   };
 
   return (
@@ -129,19 +202,19 @@ const ForgotPassword = () => {
           <div className="auth-form-icon">🔓</div>
           <h2>Reset Password</h2>
 
-          {success ? (
+          {step === 'success' ? (
             <div style={{ textAlign: 'center' }}>
               <div className="auth-success">
                 <i className="fas fa-check-circle"></i>
                 Password updated successfully!
               </div>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', marginTop: '15px' }}>
-                Redirecting to sign in...
+                Redirecting to events...
               </p>
             </div>
           ) : step === 'email' ? (
             <>
-              <p className="auth-subtitle">Verify your identity to reset your password</p>
+              <p className="auth-subtitle">Enter your email to receive a reset code</p>
 
               {error && (
                 <div className="auth-error">
@@ -150,7 +223,7 @@ const ForgotPassword = () => {
                 </div>
               )}
 
-              <form onSubmit={handleVerifyIdentity}>
+              <form onSubmit={handleSendCode}>
                 <div className="auth-field">
                   <label>Email ID</label>
                   <div className="auth-input-wrapper">
@@ -165,23 +238,55 @@ const ForgotPassword = () => {
                   </div>
                 </div>
 
+                <button type="submit" className="auth-submit-btn" disabled={loading}>
+                  {loading ? 'Sending...' : 'Send Reset Code'}
+                </button>
+              </form>
+            </>
+          ) : step === 'code' ? (
+            <>
+              <p className="auth-subtitle">Enter the 6-digit code sent to <strong style={{ color: '#ff7a00' }}>{email}</strong></p>
+
+              {error && (
+                <div className="auth-error">
+                  <i className="fas fa-exclamation-circle"></i>
+                  {error}
+                </div>
+              )}
+
+              <form onSubmit={handleVerifyCode}>
                 <div className="auth-field">
-                  <label>Phone Number</label>
+                  <label>Verification Code</label>
                   <div className="auth-input-wrapper">
-                    <span className="input-icon"><i className="fas fa-phone"></i></span>
+                    <span className="input-icon"><i className="fas fa-key"></i></span>
                     <input
-                      type="tel"
-                      placeholder="Enter your registered phone number"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="Enter 6-digit code"
+                      value={code}
+                      onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      autoFocus
+                      maxLength={6}
                     />
                   </div>
                 </div>
 
                 <button type="submit" className="auth-submit-btn" disabled={loading}>
-                  {loading ? 'Verifying...' : 'Verify & Continue'}
+                  {loading ? 'Verifying...' : 'Verify Code'}
                 </button>
               </form>
+
+              <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                <button
+                  type="button"
+                  className="otp-resend"
+                  onClick={handleResendCode}
+                  disabled={loading}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  Didn't receive the code? Resend
+                </button>
+              </div>
             </>
           ) : (
             <>
@@ -245,6 +350,16 @@ const ForgotPassword = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </div>
+                  {confirmPassword && password !== confirmPassword && (
+                    <div className="pw-req" style={{ marginTop: '6px' }}>
+                      ✗ Passwords do not match
+                    </div>
+                  )}
+                  {confirmPassword && password === confirmPassword && confirmPassword.length > 0 && (
+                    <div className="pw-req met" style={{ marginTop: '6px' }}>
+                      ✓ Passwords match
+                    </div>
+                  )}
                 </div>
 
                 <button type="submit" className="auth-submit-btn" disabled={loading}>

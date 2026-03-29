@@ -7,10 +7,17 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('Supabase credentials missing. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env');
 }
 
-// Create the Supabase client (used only for DB operations, not auth)
+// Create the Supabase client — AUTH IS DISABLED since Clerk handles authentication.
+// This client is used ONLY for database operations (select, insert, update).
 let supabase;
 if (supabaseUrl && supabaseAnonKey) {
-  supabase = createClient(supabaseUrl, supabaseAnonKey);
+  supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+      detectSessionInUrl: false,
+    },
+  });
 } else {
   // Stub client for dev without credentials
   const noOp = async () => ({ data: null, error: { message: 'Supabase not configured' } });

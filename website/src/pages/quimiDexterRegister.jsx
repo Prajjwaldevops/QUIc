@@ -98,6 +98,14 @@ const QuimiDexterRegister = () => {
         setError(`All fields are required for ${label}.`);
         return;
       }
+      if (!/^\d+$/.test(m.roll_number)) {
+        setError(`Roll number for ${label} must strictly contain only numbers.`);
+        return;
+      }
+      if (!/^\d+$/.test(m.registration_number)) {
+        setError(`Registration number for ${label} must strictly contain only numbers.`);
+        return;
+      }
     }
 
     // Check for duplicate members (by email, phone, roll, reg)
@@ -121,7 +129,7 @@ const QuimiDexterRegister = () => {
 
         const { data: user } = await supabase
           .from('users')
-          .select('email, phone, roll_number, registration_number, gender, branch')
+          .select('email, phone, roll_number, registration_number, gender, branch, batch')
           .eq('email', m.email.toLowerCase())
           .single();
 
@@ -133,17 +141,32 @@ const QuimiDexterRegister = () => {
 
         // Verify details match
         if (user.phone !== m.phone) {
-          setError(`${label}'s phone number does not match their registration data.`);
+          setError(`${label}'s phone number does not match their website registration profile.`);
           setLoading(false);
           return;
         }
-        if (user.roll_number !== m.roll_number.toUpperCase()) {
-          setError(`${label}'s roll number does not match their registration data.`);
+        if (user.roll_number !== m.roll_number) {
+          setError(`${label}'s roll number does not match their website registration profile.`);
           setLoading(false);
           return;
         }
-        if (user.registration_number !== m.registration_number.toUpperCase()) {
-          setError(`${label}'s registration number does not match their registration data.`);
+        if (user.registration_number !== m.registration_number) {
+          setError(`${label}'s registration number does not match their website registration profile.`);
+          setLoading(false);
+          return;
+        }
+        if (user.gender !== m.gender) {
+          setError(`${label}'s gender does not match their website registration profile.`);
+          setLoading(false);
+          return;
+        }
+        if (user.branch !== m.branch) {
+          setError(`${label}'s branch does not match their website registration profile.`);
+          setLoading(false);
+          return;
+        }
+        if (user.batch !== m.batch) {
+          setError(`${label}'s batch does not match their website registration profile.`);
           setLoading(false);
           return;
         }
@@ -379,6 +402,11 @@ const QuimiDexterRegister = () => {
         <div className="team-form-header">
           <h1>Create Team — Quimi Dexter</h1>
           <p>Form your team of 4 members to participate</p>
+          
+          <div className="auth-error" style={{ backgroundColor: 'rgba(255, 165, 0, 0.1)', color: '#ff9800', border: '1px solid #ff9800', marginTop: '1rem', textAlign: 'left', fontSize: '0.9rem' }}>
+            <i className="fas fa-info-circle"></i>
+            <strong>Note:</strong> Team leader should fill this form only and all members should register on the website before registering for the event.
+          </div>
         </div>
 
         {error && (
