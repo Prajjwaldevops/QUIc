@@ -62,6 +62,7 @@ root.render(
           <Route path="/quimica23" element={<Quimica23 />} />
           <Route path="/quimica25" element={<Quimica25 />} />
           <Route path="/achievements" element={<Achievements />} />
+          <Route path="/newsletter" element={<Newsletter />} />
 
           {/* Auth */}
           <Route path="/register" element={<Register />} />
