@@ -46,37 +46,38 @@ if (!CLERK_PUBLISHABLE_KEY) {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <AuthProvider>
-    <BrowserRouter>
-      <Routes>
-        {/* Public */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/ourTeam" element={<OurTeam />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/quimica23" element={<Quimica23 />} />
-        <Route path="/quimica25" element={<Quimica25 />} />
-        <Route path="/achievements" element={<Achievements />} />
+  <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY || ''}>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/ourTeam" element={<OurTeam />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/quimica23" element={<Quimica23 />} />
+          <Route path="/quimica25" element={<Quimica25 />} />
+          <Route path="/achievements" element={<Achievements />} />
 
-        {/* Auth */}
-        <Route path="/register" element={<Register />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+          {/* Auth */}
+          <Route path="/register" element={<Register />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Protected — Quimica26 events */}
-        <Route path="/quimica26" element={<ProtectedRoute><Quimica26 /></ProtectedRoute>} />
-        <Route path="/quimica26/quimi-dexter/register" element={<ProtectedRoute><QuimiDexterRegister /></ProtectedRoute>} />
-        <Route path="/quimica26/quimi-dexter/team-id" element={<ProtectedRoute><QuimiDexterTeamId /></ProtectedRoute>} />
-        <Route path="/quimica26/quimi-dexter/submission" element={<ProtectedRoute><QuimiDexterSubmission /></ProtectedRoute>} />
-        <Route path="/quimica26/quantum/register" element={<ProtectedRoute><QuantumRegister /></ProtectedRoute>} />
-        <Route path="/quimica26/quantum/uid" element={<ProtectedRoute><QuantumUid /></ProtectedRoute>} />
+          {/* Protected — Quimica26 events */}
+          <Route path="/quimica26" element={<ProtectedRoute><Quimica26 /></ProtectedRoute>} />
+          <Route path="/quimica26/quimi-dexter/register" element={<ProtectedRoute><QuimiDexterRegister /></ProtectedRoute>} />
+          <Route path="/quimica26/quimi-dexter/team-id" element={<ProtectedRoute><QuimiDexterTeamId /></ProtectedRoute>} />
+          <Route path="/quimica26/quimi-dexter/submission" element={<ProtectedRoute><QuimiDexterSubmission /></ProtectedRoute>} />
+          <Route path="/quimica26/quantum/register" element={<ProtectedRoute><QuantumRegister /></ProtectedRoute>} />
+          <Route path="/quimica26/quantum/uid" element={<ProtectedRoute><QuantumUid /></ProtectedRoute>} />
 
-        {/* Admin */}
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
-      </Routes>
-    </BrowserRouter>
-  </AuthProvider>
-  </ClerkProvider >
+          {/* Admin */}
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  </ClerkProvider>
 );
