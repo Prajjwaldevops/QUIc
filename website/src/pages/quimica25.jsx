@@ -75,20 +75,46 @@ const Quimica25 = () => {
         "https://www.youtube.com/live/A2KqB_uAsWw?si=ls5OTko7I3T7M1Q8",
     },
   ];
+useEffect(() => {
+  window.scrollTo(0, 0);
 
+  const reveals = document.querySelectorAll(".reveal");
+
+  const handleScroll = () => {
+    reveals.forEach((el) => {
+      const windowHeight = window.innerHeight;
+      const elementTop = el.getBoundingClientRect().top;
+
+      if (elementTop < windowHeight - 100) {
+        el.classList.add("active");
+      }
+    });
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  handleScroll();
+
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
   return (
     <div className="events-page">
       {/* ================= NAVBAR ================= */}
       <Navbar />
 
       {/* ================= HERO ================= */}
-      <section className="hero">
+      {/* <section className="hero">
         <h1>Our Exciting Events</h1>
         <p>
           Join us for a series of competitions, workshops, and quizzes
           designed for chemical engineering enthusiasts!
         </p>
+      </section> */}
+       <section className="team-hero reveal reveal-top">
+        <h1>Our Exciting Events</h1>
+        <p> Join us for a series of competitions, workshops, and quizzes
+          designed for chemical engineering enthusiasts!</p>
       </section>
+
 
       {/* ================= FEATURED EVENT ================= */}
       <section className="featured-event">

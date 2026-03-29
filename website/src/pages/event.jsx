@@ -72,14 +72,34 @@ const Events = () => {
       image: "/assets/Impulse.jpg",
     },
   ];
+useEffect(() => {
+  window.scrollTo(0, 0);
 
+  const reveals = document.querySelectorAll(".reveal");
+
+  const handleScroll = () => {
+    reveals.forEach((el) => {
+      const windowHeight = window.innerHeight;
+      const elementTop = el.getBoundingClientRect().top;
+
+      if (elementTop < windowHeight - 100) {
+        el.classList.add("active");
+      }
+    });
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  handleScroll();
+
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
   return (
     <div className="events-page">
       {/* ================= NAVBAR ================= */}
       <Navbar />
 
       {/* ================= HERO ================= */}
-      <section className="hero">
+      {/* <section className="hero">
         <div className="events-header">
           <h1>Our Exciting Events</h1>
           <a href="#allevents" className="all-events-btn">
@@ -90,6 +110,11 @@ const Events = () => {
           Join us for a series of competitions, workshops, and quizzes designed
           for chemical engineering enthusiasts!
         </p>
+      </section> */}
+            <section className="team-hero reveal reveal-top">
+        <h1>Our Exciting Events</h1>
+        <p>          Join us for a series of competitions, workshops, and quizzes designed
+          for chemical engineering enthusiasts!</p>
       </section>
 
       {/* ================= FEATURED EVENTS ================= */}

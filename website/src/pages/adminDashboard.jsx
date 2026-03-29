@@ -18,6 +18,7 @@ const AdminDashboard = () => {
   const [teams, setTeams] = useState([]);
   const [quantum, setQuantum] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [quantumActive, setQuantumActive] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,10 +48,38 @@ const AdminDashboard = () => {
         totalQuantum: quantumData?.length || 0,
         totalDrafts: teamsData?.filter((t) => t.draft_url).length || 0,
       });
+
+      // Fetch Quantum event status
+      const { data: settings } = await supabase
+        .from('app_settings')
+        .select('value')
+        .eq('key', 'quantum_active')
+        .single();
+        
+      if (settings) {
+        setQuantumActive(settings.value);
+      }
+
     } catch (err) {
       console.error('Dashboard fetch error:', err);
     }
     setLoading(false);
+  };
+
+  const handleToggleQuantum = async () => {
+    const newValue = !quantumActive;
+    setQuantumActive(newValue); // Optimistic UI update
+
+    const { error } = await supabase
+      .from('app_settings')
+      .update({ value: newValue })
+      .eq('key', 'quantum_active');
+
+    if (error) {
+      console.error('Error toggling quantum event:', error);
+      setQuantumActive(!newValue); // Revert on failure
+      alert('Failed to update event status');
+    }
   };
 
   const handleLogout = () => {
@@ -101,7 +130,30 @@ const AdminDashboard = () => {
       {/* Header */}
       <div className="admin-header">
         <h1>🛡️ Admin Dashboard</h1>
-        <button className="admin-logout-btn" onClick={handleLogout}>Logout</button>
+        <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(255, 122, 0, 0.1)', padding: '8px 15px', borderRadius: '8px', border: '1px solid rgba(255, 122, 0, 0.3)' }}>
+            <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px', fontWeight: '500' }}>Quantum Event Status</span>
+            <button 
+              onClick={handleToggleQuantum}
+              style={{
+                width: '40px', height: '22px', borderRadius: '20px', 
+                background: quantumActive ? '#00e676' : '#ff3d00',
+                border: 'none', cursor: 'pointer', position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              <div style={{
+                width: '18px', height: '18px', borderRadius: '50%', background: '#fff',
+                position: 'absolute', top: '2px', left: quantumActive ? '20px' : '2px',
+                transition: 'all 0.3s ease', boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+              }}></div>
+            </button>
+            <span style={{ color: quantumActive ? '#00e676' : '#ff3d00', fontSize: '13px', fontWeight: 'bold', width: '40px' }}>
+              {quantumActive ? 'LIVE' : 'OFF'}
+            </span>
+          </div>
+          <button className="admin-logout-btn" onClick={handleLogout}>Logout</button>
+        </div>
       </div>
 
       <div className="admin-body">

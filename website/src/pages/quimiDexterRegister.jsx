@@ -190,7 +190,7 @@ const QuimiDexterRegister = () => {
         }
       }
 
-      // 3. Check at least 1 female
+      // 3. Check at least 1 female (no maximum limit)
       const females = allMembers.filter((m) => m.gender === 'Female');
       if (females.length < 1) {
         setError('At least one female member is required in the team.');
@@ -198,13 +198,8 @@ const QuimiDexterRegister = () => {
         return;
       }
 
-      // 4. Check exactly 2 from Chemical branch
+      // 4. Check maximum 2 from Chemical branch
       const chemicalCount = allMembers.filter((m) => m.branch === 'Chemical').length;
-      if (chemicalCount < 2) {
-        setError('Minimum 2 members must be from the Chemical branch.');
-        setLoading(false);
-        return;
-      }
       if (chemicalCount > 2) {
         setError('Maximum 2 members can be from the Chemical branch.');
         setLoading(false);

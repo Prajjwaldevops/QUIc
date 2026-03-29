@@ -16,12 +16,37 @@ const Quimica26 = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hasTeam, setHasTeam] = useState(false);
   const [hasQuantum, setHasQuantum] = useState(false);
+  const [quantumActive, setQuantumActive] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Scroll reveal effect
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const reveals = document.querySelectorAll(".reveal");
+
+    const handleScroll = () => {
+      reveals.forEach((el) => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+
+        if (elementTop < windowHeight - 100) {
+          el.classList.add("active");
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Check registrations for events
   useEffect(() => {
     window.scrollTo(0, 0);
     checkRegistrations();
-  }, []);
+  }, [userProfile]);
 
   const checkRegistrations = async () => {
     if (!userProfile) return;
@@ -41,6 +66,17 @@ const Quimica26 = () => {
       .eq('user_email', userProfile.email);
 
     if (quantum && quantum.length > 0) setHasQuantum(true);
+
+    // Fetch Quantum event status
+    const { data: settings } = await supabase
+      .from('app_settings')
+      .select('value')
+      .eq('key', 'quantum_active')
+      .single();
+
+    if (settings && settings.value === true) {
+      setQuantumActive(true);
+    }
 
     setLoading(false);
   };
@@ -116,15 +152,44 @@ const Quimica26 = () => {
 
         {/* Quantum */}
         <div className="q26-card">
-          <div className="q26-card-img">
-            <img src="/assets/Quimica23.jpg" alt="Quantum" />
+          <div className="q26-card-img" style={{ position: 'relative' }}>
+            {quantumActive ? (
+              <img src="/assets/Quimica23.jpg" alt="Quantum" />
+            ) : (
+              <div style={{
+                position: 'absolute',
+                top: 0, left: 0, right: 0, bottom: 0,
+                backgroundColor: 'rgba(20, 20, 25, 0.85)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(255, 255, 255, 0.7)',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
+                border: '1px dashed rgba(255, 255, 255, 0.2)',
+                zIndex: 2
+              }}>
+                Coming Soon
+              </div>
+            )}
+            {/* Keeping the image underneath if needed, but heavily darkened if not active */}
+            <img src="/assets/Quimica23.jpg" alt="Quantum" style={{ opacity: quantumActive ? 1 : 0.1 }} />
           </div>
           <h3>Quantum</h3>
           <p>Solo event. Test your individual knowledge and skills in chemical engineering.</p>
           <div className="q26-card-actions">
-            <button className="q26-btn q26-btn-primary" onClick={handleQuantumRegister}>
-              {hasQuantum ? 'View Unique ID' : 'Register for Quantum'}
-            </button>
+            {quantumActive ? (
+              <button className="q26-btn q26-btn-primary" onClick={handleQuantumRegister}>
+                {hasQuantum ? 'View Unique ID' : 'Register for Quantum'}
+              </button>
+            ) : (
+              <button className="q26-btn q26-btn-locked" disabled>
+                <span className="lock-icon">🔒</span>
+                Registrations Locked
+              </button>
+            )}
           </div>
         </div>
       </section>

@@ -72,6 +72,11 @@ const QuantumRegister = () => {
       return;
     }
 
+    if (form.batch !== '2K25') {
+      setError('Quantum registration is restricted to the 2K25 batch only.');
+      return;
+    }
+
     setLoading(true);
 
     try {

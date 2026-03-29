@@ -128,13 +128,14 @@ const OurTeam = () => {
                 </a>
               )}
             </div>
+            
 
             {/* 🔥 HOVER OVERLAY */}
-            <div className="hover-overlay">
+            {/* <div className="hover-overlay">
               <h3>{member.name}</h3>
               <p>{member.post}</p>
               <p>{member.batch}</p>
-            </div>
+            </div> */}
           </div>
         ))}
       </section>
@@ -159,11 +160,11 @@ const OurTeam = () => {
             </div>
 
             {/* 🔥 HOVER OVERLAY */}
-            <div className="hover-overlay">
+            {/* <div className="hover-overlay">
               <h3>{member.name}</h3>
               <p>{member.post}</p>
               <p>{member.batch}</p>
-            </div>
+            </div> */}
           </div>
         ))}
       </section>
@@ -190,11 +191,11 @@ const OurTeam = () => {
             </div>
 
             {/* 🔥 HOVER OVERLAY */}
-            <div className="hover-overlay">
+            {/* <div className="hover-overlay">
               <h3>{member.name}</h3>
               <p>{member.post}</p>
               <p>{member.batch}</p>
-            </div>
+            </div> */}
           </div>
         ))}
       </section>

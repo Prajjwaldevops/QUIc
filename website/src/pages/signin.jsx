@@ -25,6 +25,8 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [mfaRequired, setMfaRequired] = useState(false);
+  const [code, setCode] = useState('');
 
   // If already signed in, redirect to event page
   useEffect(() => {
@@ -94,9 +96,21 @@ const SignIn = () => {
         await setActive({ session: result.createdSessionId });
         // Let the useEffect hook handle navigation once AuthContext synchronizes!
       } else if (result.status === 'needs_first_factor') {
-        setError(`Additional verification required. Clerk requires: ${JSON.stringify(result.supportedFirstFactors)}`);
+        const factor = result.supportedFirstFactors.find(f => f.strategy === 'email_code');
+        if (factor) {
+          await signIn.prepareFirstFactor({ strategy: 'email_code', emailAddressId: factor.emailAddressId });
+          setMfaRequired(true);
+          setError('Clerk requires email verification. A code has been sent to your email.');
+        } else {
+          setError(`Additional verification required. Clerk requires: ${JSON.stringify(result.supportedFirstFactors)}`);
+        }
       } else if (result.status === 'needs_second_factor') {
-        setError(`MFA is blocking this. Clerk officially demands: ${JSON.stringify(result.supportedSecondFactors)}`);
+        const factor = result.supportedSecondFactors.find(f => f.strategy === 'email_code');
+        if (factor) {
+          await signIn.prepareSecondFactor({ strategy: 'email_code', emailAddressId: factor.emailAddressId });
+        }
+        setMfaRequired(true);
+        setError('MFA requested by Clerk. A code has been sent to your email.');
       } else {
         setError('Sign in failed. Please try again.');
       }
@@ -111,6 +125,37 @@ const SignIn = () => {
       } else {
         setError(clerkError);
       }
+    }
+
+    setLoading(false);
+  };
+
+  const handleVerify = async (e) => {
+    e.preventDefault();
+    if (!code) {
+      setError('Please enter the verification code.');
+      return;
+    }
+    setError('');
+    setLoading(true);
+
+    try {
+      let result;
+      // Attempt verification based on Clerk's current internal status
+      if (signIn.status === 'needs_second_factor') {
+        result = await signIn.attemptSecondFactor({ strategy: 'email_code', code });
+      } else {
+        result = await signIn.attemptFirstFactor({ strategy: 'email_code', code });
+      }
+
+      if (result.status === 'complete') {
+        await setActive({ session: result.createdSessionId });
+      } else {
+        setError('Verification failed. Internal Status: ' + result.status);
+      }
+    } catch (err) {
+      const clerkError = err?.errors?.[0]?.longMessage || err?.errors?.[0]?.message || err?.message || 'Verification failed. Please try again.';
+      setError(clerkError);
     }
 
     setLoading(false);
@@ -155,53 +200,82 @@ const SignIn = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit}>
-            {/* Email or Phone */}
-            <div className="auth-field">
-              <label>Email ID or Phone Number</label>
-              <div className="auth-input-wrapper">
-                <span className="input-icon"><i className="fas fa-user"></i></span>
-                <input
-                  type="text"
-                  placeholder="Enter email or 10-digit phone number"
-                  value={emailOrPhone}
-                  onChange={(e) => setEmailOrPhone(e.target.value)}
-                  autoFocus
-                />
+          {mfaRequired ? (
+            <form onSubmit={handleVerify}>
+              <div className="auth-field">
+                <label>Verification Code</label>
+                <div className="auth-input-wrapper">
+                  <span className="input-icon"><i className="fas fa-key"></i></span>
+                  <input
+                    type="text"
+                    placeholder="Enter the code sent to your email"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    autoFocus
+                  />
+                </div>
               </div>
-            </div>
+              <button type="submit" className="auth-submit-btn" disabled={loading}>
+                {loading ? 'Verifying...' : 'Verify Code'}
+              </button>
+              <button 
+                type="button" 
+                className="q26-btn q26-btn-secondary" 
+                style={{ width: '100%', marginTop: '10px' }}
+                onClick={() => setMfaRequired(false)}
+              >
+                Go Back
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              {/* Email or Phone */}
+              <div className="auth-field">
+                <label>Email ID or Phone Number</label>
+                <div className="auth-input-wrapper">
+                  <span className="input-icon"><i className="fas fa-user"></i></span>
+                  <input
+                    type="text"
+                    placeholder="Enter email or 10-digit phone number"
+                    value={emailOrPhone}
+                    onChange={(e) => setEmailOrPhone(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+              </div>
 
-            {/* Password */}
-            <div className="auth-field">
-              <label>Password</label>
-              <div className="auth-input-wrapper">
-                <span className="input-icon"><i className="fas fa-lock"></i></span>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  className="password-toggle-btn"
-                  onClick={() => setShowPassword(!showPassword)}
-                  tabIndex={-1}
-                >
-                  {showPassword ? '🙈' : '👁️'}
-                </button>
+              {/* Password */}
+              <div className="auth-field">
+                <label>Password</label>
+                <div className="auth-input-wrapper">
+                  <span className="input-icon"><i className="fas fa-lock"></i></span>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? '🙈' : '👁️'}
+                  </button>
+                </div>
+                <div style={{ textAlign: 'right', marginTop: '8px' }}>
+                  <Link to="/forgot-password" className="forgot-password-link">
+                    Forgot Password?
+                  </Link>
+                </div>
               </div>
-              <div style={{ textAlign: 'right', marginTop: '8px' }}>
-                <Link to="/forgot-password" className="forgot-password-link">
-                  Forgot Password?
-                </Link>
-              </div>
-            </div>
 
-            <button type="submit" className="auth-submit-btn" disabled={loading}>
-              {loading ? 'Signing In...' : 'Sign In'}
-            </button>
-          </form>
+              <button type="submit" className="auth-submit-btn" disabled={loading}>
+                {loading ? 'Signing In...' : 'Sign In'}
+              </button>
+            </form>
+          )}
 
           <div className="auth-secure-badge">
             <i className="fas fa-shield-alt"></i>

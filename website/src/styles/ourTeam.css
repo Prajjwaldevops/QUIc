@@ -14,7 +14,7 @@
   scroll-margin-top: 80px; 
 }
 
-/* Hero Section */
+/* ================= HERO ================= */
 .team-hero {
   text-align: center;
   margin-top: 60px;
@@ -33,146 +33,108 @@
   opacity: 0.8;
 }
 
-/* Team Section */
+/* ================= TEAM GRID ================= */
 .team-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  padding: 60px 8%;
+  grid-template-columns: repeat(4, 1fr); /* ✅ 4 per row */
+  gap: 20px;
+  padding: 50px 6%;
 }
 
+/* ================= CARD ================= */
+/* 🔥 FORCE SMALL CARD */
 .team-card {
-  background: white;
-  border-radius: 12px;
-  text-align: center;
-  padding: 25px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  transition: 0.3s ease;
-}
-
-.team-card:hover {
-  transform: translateY(-8px);
-}
-
-/* ✅ IMAGE CENTER FIX */
-.team-card img {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 15px auto;
-  display: block;
-  object-fit: cover;
-}
-
-.team-card h3 {
-  margin-bottom: 5px;
-  color: #0f172a;
-}
-
-.team-card p {
-  color: #64748b;
-  font-size: 14px;
-}
-
-.team-container {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  padding: 50px;
-}
-
-/* Flip Card */
-.team-card {
-  width: 250px;
-  height: 320px;
+  width: 180px !important;
+  height: 230px !important;
   perspective: 1000px;
 }
 
+/* 🔥 FORCE INNER SIZE */
 .card-inner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.8s ease;
+  width: 100% !important;
+  height: 100% !important;
 }
 
-/* Hover Flip */
+
 .team-card:hover .card-inner {
   transform: rotateY(180deg);
 }
 
-/* Front & Back */
-.card-front,
+/* ================= FRONT & BACK ================= */
+/* .card-front,
 .card-back {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #0d2f9f;
+  background: #05060a;
   color: white;
   border-radius: 12px;
 
-  /* ✅ PERFECT CENTERING */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 8px; /* 🔥 spacing fix */
+  gap: 6px;
 
   backface-visibility: hidden;
-  box-shadow: 0 8px 20px rgba(19, 5, 104, 0.3);
-  padding: 20px;
+  padding: 15px;
   text-align: center;
-}
-
-.card-front img {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 15px auto;
-  display: block;
-  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
 .card-back {
   transform: rotateY(180deg);
-  background: #0a1d6c;
+  background: #041854;
+} */
 
-  /* ✅ CENTER LINKEDIN ICON ALSO */
-  justify-content: center;
-  align-items: center;
+/* ================= IMAGE ================= */
+.card-front img,
+.team-card img {
+  width: 100px !important;
+  height: 100px !important; /* 🔥 smaller */
+  border-radius: 50%;
+  margin-bottom: 10px;
+  object-fit: cover;
 }
 
+/* ================= TEXT ================= */
+.team-card h3 {
+  font-size: 12px !important;
+}
 
-.teamtext {
-  margin-top: 30px;
+.team-card p {
+    font-size: 10px !important;
+  color: #cbd5f5;
+}
+.team-card {
+  background: #070a0c !important; /* 🔥 NEW COLOR */
+  border-radius: 12px;
+}
+/* ================= LINKEDIN ================= */
+.linkedin-icon {
+  margin-top: 8px;
+  background: #0077b5;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
-
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  transition: 0.3s ease;
 }
 
-
-/* 🔥 FIX CARD POSITION */
-.team-card {
-  position: relative;
-  overflow: hidden;
+.linkedin-icon:hover {
+  transform: scale(1.1);
 }
 
-/* NORMAL CONTENT */
-.team-content {
-  padding: 10px;
-  text-align: center;
-}
-
-/* 🔥 OVERLAY */
+/* ================= OVERLAY ================= */
 .hover-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background: rgba(0, 0, 0, 0.5); /* transparent */
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
-
   color: white;
 
   display: flex;
@@ -184,96 +146,18 @@
   transition: 0.4s ease;
 }
 
-/* SHOW ON HOVER */
 .team-card:hover .hover-overlay {
   opacity: 1;
 }
 
-
-.team-container {
+/* ================= TEXT CENTER ================= */
+.teamtext {
+  margin-top: 30px;
   display: flex;
   justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  padding: 60px 20px;
 }
 
-.team-card {
-  width: 260px;
-  height: 340px;
-  perspective: 1000px;
-}
-
-.card-inner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.8s ease;
-}
-
-.team-card:hover .card-inner {
-  transform: rotateY(180deg);
-}
-
-.card-front,
-.card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #061a5c;
-  color: white;
-  border-radius: 15px;
-
-  /* ✅ SAME CENTER FIX */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-
-  backface-visibility: hidden;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-}
-
-.card-front img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin: 0 auto 15px auto;
-  display: block;
-  object-fit: cover;
-}
-
-.card-back {
-  transform: rotateY(180deg);
-  background: #041854;
-}
-
-/* ✅ LINKEDIN CENTERED */
-.linkedin-icon {
-  margin-top: 10px;
-  background: #0077b5;
-  color: white;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  transition: 0.3s ease;
-}
-
-.linkedin-icon:hover {
-  transform: scale(1.15);
-  background: #005582;
-}
-
-/* ================= SCROLL ANIMATION ================= */
-
+/* ================= ANIMATION ================= */
 .reveal {
   opacity: 0;
   transform: translateY(60px);
@@ -297,20 +181,29 @@
   transform: translateX(0) translateY(0);
 }
 
-/* Responsive */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 1024px) {
   .team-container {
-    display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 350px) {
+@media (max-width: 768px) {
   .team-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .team-container {
+    grid-template-columns: 1fr; /* 1 card per row */
+    justify-items: center;     /* center card */
   }
 
+  .team-card {
+    width: 90% !important;   /* 🔥 take full width */
+    height: 240px !important;
+  }
 
   .team-hero h1 {
     font-size: 32px;

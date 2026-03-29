@@ -1,4 +1,4 @@
-
+/* ================= ROOT ================= */
 :root {
   --bg-color: #062738;
   --second-bg-color: #373c46;
@@ -11,8 +11,7 @@
   --cyan-color: #96C4B9;
 }
 
-/* HERO */
-
+/* ================= HERO ================= */
 .hero {
   margin-top: 60px;
   padding: 100px 20px;
@@ -24,23 +23,62 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  display: flex;
   margin: 3rem 0;
 }
 
 .hero h1 {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  transition: all 0.5s ease;
 }
 
 .hero p {
   color: #555;
   font-size: 1.1rem;
-  transition: all 0.5s ease;
 }
 
-/* EVENTS HEADER */
+
+
+.team-hero {
+  text-align: center;
+  margin-top: 60px;
+  padding: 100px 20px;
+  background: linear-gradient(135deg, #b54a0e, #e4621b);
+  color: white;
+}
+
+.team-hero h1 {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.team-hero p {
+  font-size: 18px;
+  opacity: 0.8;
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal-left {
+  transform: translateX(-80px);
+}
+
+.reveal-right {
+  transform: translateX(80px);
+}
+
+.reveal-top {
+  transform: translateY(-80px);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+}
+
+/* ================= HEADER ================= */
 .events-header {
   display: flex;
   flex-direction: column; 
@@ -48,10 +86,8 @@
   justify-content: center; 
   gap: 12px;
   margin-bottom: 20px;
-  text-align: center;
 }
 
-/* ALL EVENTS BUTTON */
 .all-events-btn {
   padding: 10px 18px;
   border-radius: 8px;
@@ -67,23 +103,23 @@
   transform: translateY(-2px);
 }
 
-
-/*  events   */
+/* ================= FEATURED ================= */
 .featured-event {
-  max-width: 1200px;
-  margin: 60px auto;
+  max-width: 1100px;
+  margin: 50px auto;
   display: flex;
-  gap: 60px;
+  gap: 50px;
   align-items: center;
-  padding: 0 20px;
+
+  padding: 0 20px 0 100px;  /* 🔥 added left space */
 }
 
 .featured-image img {
-  width: 420px;
-  height: 420px;
+  width: 240px !important;
+  height: 240px !important;
   object-fit: cover;
   border-radius: 12px;
-  box-shadow: 0 0 25px rgba(255, 122, 0, 0.6);
+  box-shadow: 0 0 15px rgba(255, 122, 0, 0.4);
 }
 
 .featured-info {
@@ -91,74 +127,78 @@
 }
 
 .featured-info h2 {
-  font-size: 3rem;
-  margin-bottom: 20px;
+  font-size: 1rem;   /* reduced from 2.3rem */
+  margin-bottom: 10px;
 }
 
 .featured-info p {
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 0.95rem;  /* reduced */
+  line-height: 1.5;
   color: rgba(201, 97, 0, 0.825);
-  max-width: 500px;
 }
 
 .featured-info .date {
-  margin-top: 15px;
-  font-weight: 600;
-  color: #f97316;
+  margin-top: 8px;
+  font-size: 0.9rem;   /* reduced */
 }
 
 .featured-info button {
-  margin-top: 25px;
+  margin-top: 15px;
   background: linear-gradient(to right, #ff7e5f, #feb47b);
   border: none;
   color: white;
-  padding: 12px 28px;
+padding: 8px 18px;
   border-radius: 8px;
-  font-size: 1rem;
+    font-size: 0.9rem;
   cursor: pointer;
 }
 
-/* ===== GRID SECTION ===== */
+/* ================= GRID ================= */
 .event-grid {
-  max-width: 1200px;
-  margin: 80px auto;
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 0 20px 60px;
+
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  padding: 0 20px 80px;
-  
+  grid-template-columns: repeat(3, auto); /* 🔥 FIX */
+  gap: 25px;
+
+  justify-content: center; /* 🔥 center items */
 }
 
+/* ================= CARD ================= */
 .event-card {
   text-align: center;
 }
 
+/* 🔥 FINAL FIX FOR IMAGE SIZE */
 .event-card img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
+  width: 220px !important;
+  height: 220px !important;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
   transition: transform 0.3s ease;
 }
 
 .event-card img:hover {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 .event-card h4 {
-  margin-top: 15px;
-  font-size: 1.3rem;
+  margin-top: 12px;
+  font-size: 1.1rem;
   color: #fff;
 }
 
 .event-card p {
-  margin-top: 8px;
+  margin-top: 6px;
   color: rgba(255,255,255,0.65);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
   .featured-event {
     flex-direction: column;
@@ -166,30 +206,28 @@
   }
 
   .featured-image img {
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 250px;
   }
 
   .event-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, auto);
+  }
+
+  .event-card img {
+    width: 200px !important;
+    height: 200px !important;
   }
 }
 
 @media (max-width: 780px) {
-  .event-card{
-     max-width: 400px;
+  .event-grid {
+    grid-template-columns: repeat(1, auto);
+    justify-content: center;
   }
 
-  .event-grid {
-  max-width: 1200px;
-  margin: 80px auto;
-  padding: 0 20px;
-
-  display: grid;
-  grid-template-columns: repeat(1, minmax(250px, 320px));
-
-  gap: 30px;
-
-  justify-content: center; 
+  .event-card img {
+    width: 180px !important;
+    height: 180px !important;
   }
 }

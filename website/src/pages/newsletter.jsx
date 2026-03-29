@@ -36,14 +36,81 @@ import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from "@fortawesome
       image: "/assets/Bits_blog.jpg",
     },
   ];
+useEffect(() => {
+    window.scrollTo(0, 0);
+    checkRegistrations();
+  }, []);
 
+  const checkRegistrations = async () => {
+    if (!userProfile) return;
+
+    // Check Quimi Dexter team
+    const { data: teams } = await supabase
+      .from('quimi_dexter_teams')
+      .select('team_id')
+      .or(`leader_email.eq.${userProfile.email},member1_email.eq.${userProfile.email},member2_email.eq.${userProfile.email},member3_email.eq.${userProfile.email}`);
+
+    if (teams && teams.length > 0) setHasTeam(true);
+
+    // Check Quantum registration
+    const { data: quantum } = await supabase
+      .from('quantum_registrations')
+      .select('uid')
+      .eq('user_email', userProfile.email);
+
+    if (quantum && quantum.length > 0) setHasQuantum(true);
+
+    setLoading(false);
+  };
+
+  const handleQuimiDexterRegister = () => {
+    if (hasTeam) {
+      navigate('/quimica26/quimi-dexter/team-id');
+    } else {
+      navigate('/quimica26/quimi-dexter/register');
+    }
+  };
+
+  const handleQuantumRegister = () => {
+    if (hasQuantum) {
+      navigate('/quimica26/quantum/uid');
+    } else {
+      navigate('/quimica26/quantum/register');
+    }
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+  useEffect(() => {
+  window.scrollTo(0, 0);
+
+  const reveals = document.querySelectorAll(".reveal");
+
+  const handleScroll = () => {
+    reveals.forEach((el) => {
+      const windowHeight = window.innerHeight;
+      const elementTop = el.getBoundingClientRect().top;
+
+      if (elementTop < windowHeight - 100) {
+        el.classList.add("active");
+      }
+    });
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  handleScroll();
+
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
   return (
     <div className="magazine-page">
       {/* ================= NAVBAR ================= */}
       <Navbar />
 
       {/* ================= HERO ================= */}
-      <section className="hero">
+      {/* <section className="hero">
         <div className="magazine-header">
           <h1>Our Exciting magazine</h1>
         </div>
@@ -51,6 +118,11 @@ import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from "@fortawesome
           Join us for a series of competitions, workshops, and quizzes designed
           for chemical engineering enthusiasts!
         </p>
+      </section> */}
+           <section className="team-hero reveal reveal-top">
+        <h1>Our Exciting magazine</h1>
+        <p>            Join us for a series of competitions, workshops, and quizzes designed
+          for chemical engineering enthusiasts!</p>
       </section>
 
       {/* ================= FEATURED Magazine ================= */}
