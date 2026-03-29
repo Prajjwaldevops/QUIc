@@ -52,9 +52,9 @@ const QuimiDexterSubmission = () => {
       return;
     }
 
-    // 5 MB limit
-    if (selectedFile.size > 5 * 1024 * 1024) {
-      setError('File size exceeds 5 MB limit. Please choose a smaller file.');
+    // 10 MB limit
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      setError('File size exceeds 10 MB limit. Please choose a smaller file.');
       return;
     }
 
@@ -208,7 +208,7 @@ const QuimiDexterSubmission = () => {
             >
               <span className="upload-icon">📄</span>
               <h4>Drag & drop your file here</h4>
-              <p>or click to browse • Max size: 5 MB</p>
+              <p>or click to browse • Max size: 10 MB</p>
               <input
                 ref={fileInputRef}
                 type="file"
