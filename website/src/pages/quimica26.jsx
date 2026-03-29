@@ -9,27 +9,7 @@ import Footer from "./footer";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
-useEffect(() => {
-  window.scrollTo(0, 0);
 
-  const reveals = document.querySelectorAll(".reveal");
-
-  const handleScroll = () => {
-    reveals.forEach((el) => {
-      const windowHeight = window.innerHeight;
-      const elementTop = el.getBoundingClientRect().top;
-
-      if (elementTop < windowHeight - 100) {
-        el.classList.add("active");
-      }
-    });
-  };
-
-  window.addEventListener("scroll", handleScroll);
-  handleScroll();
-
-  return () => window.removeEventListener("scroll", handleScroll);
-}, []);
 const Quimica26 = () => {
   const navigate = useNavigate();
   const { userProfile, signOut } = useAuth();
@@ -38,10 +18,34 @@ const Quimica26 = () => {
   const [hasQuantum, setHasQuantum] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Scroll reveal effect
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const reveals = document.querySelectorAll(".reveal");
+
+    const handleScroll = () => {
+      reveals.forEach((el) => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+
+        if (elementTop < windowHeight - 100) {
+          el.classList.add("active");
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Check registrations for events
   useEffect(() => {
     window.scrollTo(0, 0);
     checkRegistrations();
-  }, []);
+  }, [userProfile]);
 
   const checkRegistrations = async () => {
     if (!userProfile) return;
