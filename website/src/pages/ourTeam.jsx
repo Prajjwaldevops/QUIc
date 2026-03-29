@@ -126,10 +126,9 @@ const OurTeam = () => {
       </section>
 
       {/* ================= TEAM ================= */}
-
+      <h1 className="teamtext">OUR POST BEARERS</h1>
       <section className="team-container">
-      <h1>OUR POST BEARERS</h1>
-
+      
         {team22.map((member, idx) => (
           <div className="team-card reveal reveal-left" key={idx}>
             <img src={member.image} alt={member.name} />
@@ -157,9 +156,8 @@ const OurTeam = () => {
         ))}
       </section>
 
+      <h1 className="teamtext">TEAM 2K23</h1>
       <section className="team-container">
-        <h1>TEAM 2K23</h1>
-
         {team23.map((member, idx) => (
           <div className="team-card reveal reveal-left" key={idx}>
             <img src={member.image} alt={member.name} />
@@ -187,8 +185,9 @@ const OurTeam = () => {
         ))}
       </section>
 
+      <h1 className="teamtext">TEAM 2K24</h1>
       <section className="team-container">
-        <h1>TEAM 2K24</h1>
+        
 
         {team24.map((member, idx) => (
           <div className="team-card reveal reveal-left" key={idx}>

@@ -142,8 +142,12 @@
 }
 
 
+.teamtext {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
 
-
+}
 
 
 /* 🔥 FIX CARD POSITION */
@@ -296,15 +300,16 @@
 /* Responsive */
 @media (max-width: 1024px) {
   .team-container {
-    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 300px) {
+@media (max-width: 350px) {
   .team-container {
-    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
-
 
 
   .team-hero h1 {
