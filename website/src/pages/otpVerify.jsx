@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import '../styles/auth.css';
 import '../styles/homePage.css';
+import Navbar from "./navbar";
 
 const OtpVerify = () => {
   const navigate = useNavigate();

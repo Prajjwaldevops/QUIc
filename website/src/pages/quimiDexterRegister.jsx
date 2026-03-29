@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import '../styles/homePage.css';
 import '../styles/quimica26.css';
 import '../styles/auth.css';
+import Navbar from "./navbar";
 
 const BRANCHES = [
   'Computer Science',

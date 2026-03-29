@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import '../styles/homePage.css';
 import '../styles/quimica26.css';
+import Navbar from "./navbar";
+import Footer from "./footer";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -67,24 +69,7 @@ const Quimica26 = () => {
   return (
     <div className="q26-page">
       {/* NAVBAR */}
-      <nav className="navbar">
-        <div className="nav-left">
-          <img src="/quimicaLogoWhite.png" alt="logo" />
-          <h2>QUIMICA</h2>
-        </div>
-
-        <div className={`menu-icon ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(!menuOpen)}>
-          ☰
-        </div>
-
-        <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
-          <li><NavLink to="/" onClick={() => setMenuOpen(false)}>Home</NavLink></li>
-          <li><NavLink to="/events" onClick={() => setMenuOpen(false)}>Events</NavLink></li>
-          <li><NavLink to="/quimica26" onClick={() => setMenuOpen(false)}>Quimica'26</NavLink></li>
-          <li><NavLink to="/ourTeam" onClick={() => setMenuOpen(false)}>Our Team</NavLink></li>
-          <li><NavLink to="/contact" onClick={() => setMenuOpen(false)}>Contact</NavLink></li>
-        </ul>
-      </nav>
+      <Navbar />
 
       {/* User bar */}
       <div className="q26-user-bar">
@@ -145,28 +130,7 @@ const Quimica26 = () => {
       </section>
 
       {/* Footer */}
-      <footer className="footer" id="contact">
-        <div className="footer-left">
-          <img src="/quimicaLogoWhite.png" alt="logo" />
-          <h4>CHEMICAL ENGINEERING SOCIETY</h4>
-          <p>Department of Chemical Engineering</p>
-          <p>BIT Sindri, Dhanbad</p>
-        </div>
-        <div className="footer-center">
-          <h4>FOLLOW</h4>
-          <div className="social-icons">
-            <FontAwesomeIcon icon={faFacebookF} />
-            <FontAwesomeIcon icon={faLinkedinIn} />
-            <FontAwesomeIcon icon={faInstagram} />
-            <FontAwesomeIcon icon={faXTwitter} />
-          </div>
-        </div>
-        <div className="footer-right">
-          <h4>CONTACT US</h4>
-          <p>BIT Sindri</p>
-          <p>Dhanbad, India</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

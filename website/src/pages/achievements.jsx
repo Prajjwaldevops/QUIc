@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import "../styles/achievements.css";
 import "../styles/homePage.css";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./navbar";
 
 const Achievements = () => {
   const navigate = useNavigate();
@@ -135,22 +136,7 @@ const Achievements = () => {
     <div className="events-page">
 
       {/* NAVBAR */}
-      <nav className="navbar">
-        <div className="logo" onClick={() => navigate("/")}>
-          <img src="/quimicaLogoWhite.png" alt="QUIMICA Logo" className="navbar-logo" />
-          <span>QUIMICA</span>
-        </div>
-
-        {/* Hamburger for mobile */}
-        <div className="hamburger">☰</div>
-
-        <ul className="nav-links">
-          <li><a onClick={() => navigate("/")}>Home</a></li>
-          <li><a onClick={() => navigate("/events")}>Events</a></li>
-          <li><a onClick={() => navigate("/ourTeam")}>Our Team</a></li>
-          <li><a onClick={() => navigate("/contact")}>Contact</a></li>
-        </ul>
-      </nav>
+      <Navbar />
 
       {/* HERO */}
       <section className="hero">
@@ -220,31 +206,7 @@ const Achievements = () => {
       </section>
 
       {/* FOOTER */}
-      <footer className="custom-footer">
-        <div className="footer-top-bar"></div>
-        <div className="footer-content">
-          <div className="footer-left">
-            <img src="/quimicaLogoWhite.png" alt="QUIMICA Logo" className="footer-logo" />
-            <h2>Chemical Engineering Society</h2>
-            <p>Department of Chemical Engineering</p>
-            <p>BIT Sindri, Dhanbad</p>
-          </div>
-          <div className="footer-center">
-            <h3>Follow Us</h3>
-            <div className="social-icons">
-              <a href="#"><i className="fab fa-facebook-f"></i></a>
-              <a href="#"><i className="fab fa-linkedin-in"></i></a>
-              <a href="#"><i className="fab fa-instagram"></i></a>
-            </div>
-          </div>
-          <div className="footer-right">
-            <h2>Contact Us</h2>
-            <p>BIT Sindri</p>
-            <p>Dhanbad, India - 721302</p>
-            <p>Phone: +91-3222-255221</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import '../styles/homePage.css';
 import '../styles/quimica26.css';
+import Navbar from "./navbar";
 
 const QuimiDexterSubmission = () => {
   const navigate = useNavigate();

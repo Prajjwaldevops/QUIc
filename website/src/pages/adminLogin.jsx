@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../styles/quimica26.css';
 import '../styles/auth.css';
+import Navbar from "./navbar";
 
 // Hardcoded admin credentials
 const ADMIN_USER = 'admin';

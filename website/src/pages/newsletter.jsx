@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/newsletter.css";
 import "../styles/homePage.css";
+import Navbar from "./navbar";
+import Footer from "./footer";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from "@fortawesome/free-brands-svg-icons";
@@ -38,44 +40,7 @@ import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from "@fortawesome
   return (
     <div className="magazine-page">
       {/* ================= NAVBAR ================= */}
-      <nav className="navbar">
-        <div className="nav-left">
-          <img src="/quimicaLogoWhite.png" alt="logo" />
-          <h2>QUIMICA</h2>
-        </div>
-
-        {/* HAMBURGER */}
-        <div
-          className={`menu-icon ${menuOpen ? "open" : ""}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
-        </div>
-
-        {/* NAV LINKS */}
-        <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-          <li>
-            <NavLink to="/" onClick={() => setMenuOpen(false)}>
-              Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/events" onClick={() => setMenuOpen(false)}>
-              Events
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/ourTeam" onClick={() => setMenuOpen(false)}>
-              Our Team
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/contact" onClick={() => setMenuOpen(false)}>
-              Faculty
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
+      <Navbar />
 
       {/* ================= HERO ================= */}
       <section className="hero">
@@ -142,31 +107,7 @@ import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from "@fortawesome
 
 
       {/* ================= FOOTER ================= */}
-      <footer className="footer" id="contact">
-        <div className="footer-left">
-          <img src="/quimicaLogoWhite.png" alt="logo" />
-          <h4>CHEMICAL ENGINEERING SOCIETY</h4>
-          <p>Department of Chemical Engineering</p>
-          <p>BIT Sindri, Dhanbad</p>
-        </div>
-
-        <div className="footer-center">
-          <h4>FOLLOW</h4>
-          <div className="social-icons">
-            <a href="#"><FontAwesomeIcon icon={faFacebookF} /></a>
-            <a href="#"><FontAwesomeIcon icon={faLinkedinIn} /></a>
-            <a href="#"><FontAwesomeIcon icon={faInstagram} /></a>
-            <a href="#"><FontAwesomeIcon icon={faXTwitter} /></a>
-          </div>
-        </div>
-
-        <div className="footer-right">
-          <h4>CONTACT US</h4>
-          <p>BIT Sindri</p>
-          <p>Dhanbad, India - 721302</p>
-          <p>Phone: +91-3222-255221</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

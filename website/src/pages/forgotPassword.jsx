@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import '../styles/auth.css';
 import '../styles/homePage.css';
+import Navbar from "./navbar";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();

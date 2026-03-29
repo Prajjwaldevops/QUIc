@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/ourTeam.css";
 import "../styles/homePage.css";
+import Navbar from "./navbar";
+import Footer from "./footer";
 
 // ✅ FontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,10 +40,10 @@ const OurTeam = () => {
   const team23 = [
     { name: "KUMAR ANJANI GAURAV", batch: "2k23", image: "/assets/team23/anjanisir.jpg", linkedIn: "https://www.linkedin.com/in/kumar-anjani-gaurav-016693287/" },
     { name: "ANUPRIYA KUMARI", batch: "2k23", image: "/assets/team23/anupriyamam.jpg", linkedIn: "https://www.linkedin.com/in/anupriya-kumari-251b29290/" },
-    { name: "BABAN KUMAR GUPTA", batch: "2k23", image: "/assets/team23/babansir.jpeg", linkedIn: "https://www.linkedin.com/in/baban-kumar-gupta-b82b44290/" },
-    { name: "BITTU KUMAR", batch: "2k23", image: "/assets23/team/bittusir.jpg", linkedIn: "https://www.linkedin.com/in/bittukumar7277/" },
+    { name: "BABAN KUMAR GUPTA", batch: "2k23", image: "/assets/team23/babansir.JPG", linkedIn: "https://www.linkedin.com/in/baban-kumar-gupta-b82b44290/" },
+    { name: "BITTU KUMAR", batch: "2k23", image: "/assets/team23/bittusir.jpg", linkedIn: "https://www.linkedin.com/in/bittukumar7277/" },
     { name: "GOURAV KUMAR", batch: "2k23", image: "/assets/team23/gouravsir.jpeg", linkedIn: "https://www.linkedin.com/in/gourav-kumar-gk/" },
-    { name: "HARSH KASHYAP", batch: "2k23", image: "/assets23/team/harshsir.jpg", linkedIn: "https://www.linkedin.com/in/harsh-kashyap-07b624290/" },
+    { name: "HARSH KASHYAP", batch: "2k23", image: "/assets/team23/harshsir.jpg", linkedIn: "https://www.linkedin.com/in/harsh-kashyap-07b624290/" },
     { name: "HARSHIT RAI", batch: "2k23", image: "/assets/team23/harshitsir.jpeg", linkedIn: "https://www.linkedin.com/in/harshit-rai-26b7a7282/" },
     { name: "JIYA RANI", batch: "2k23", image: "/assets/team23/jiyamam.jpg", linkedIn: "https://www.linkedin.com/in/jiya-rani-010aa0290/" },
     { name: "PALAK PRIYA", batch: "2k23", image: "/assets/team23/palakmam.jpg", linkedIn: "https://www.linkedin.com/in/palak-priya-54b7891b6/" },
@@ -98,26 +100,7 @@ const OurTeam = () => {
   return (
     <div className="homepage">
       {/* ================= NAVBAR ================= */}
-      <nav className="navbar">
-        <div className="nav-left">
-          <img src="/quimicaLogoWhite.png" alt="logo" />
-          <h2>QUIMICA</h2>
-        </div>
-
-        <div
-          className={`menu-icon ${menuOpen ? "open" : ""}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
-        </div>
-
-        <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-          <li><NavLink to="/" onClick={() => setMenuOpen(false)}>Home</NavLink></li>
-          <li><NavLink to="/events" onClick={() => setMenuOpen(false)}>Events</NavLink></li>
-          <li><NavLink to="/ourTeam" onClick={() => setMenuOpen(false)}>Our Team</NavLink></li>
-          <li><NavLink to="/contact" onClick={() => setMenuOpen(false)}>Contact</NavLink></li>
-        </ul>
-      </nav>
+      <Navbar />
 
       {/* ================= HERO ================= */}
       <section className="team-hero reveal reveal-top">
@@ -217,31 +200,7 @@ const OurTeam = () => {
       </section>
 
       {/* ================= FOOTER ================= */}
-      <footer className="footer" id="contact">
-        <div className="footer-left">
-          <img src="/quimicaLogoWhite.png" alt="logo" />
-          <h4>CHEMICAL ENGINEERING SOCIETY</h4>
-          <p>Department of Chemical Engineering</p>
-          <p>BIT Sindri, Dhanbad</p>
-        </div>
-
-        <div className="footer-center">
-          <h4>FOLLOW</h4>
-          <div className="social-icons">
-            <a href="#"><FontAwesomeIcon icon={faFacebookF} /></a>
-            <a href="#"><FontAwesomeIcon icon={faLinkedinIn} /></a>
-            <a href="#"><FontAwesomeIcon icon={faInstagram} /></a>
-            <a href="#"><FontAwesomeIcon icon={faXTwitter} /></a>
-          </div>
-        </div>
-
-        <div className="footer-right">
-          <h4>CONTACT US</h4>
-          <p>BIT Sindri</p>
-          <p>Dhanbad, India - 721302</p>
-          <p>Phone: +91-3222-255221</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

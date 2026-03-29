@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import '../styles/homePage.css';
 import '../styles/quimica26.css';
 import '../styles/auth.css';
+import Navbar from "./navbar";
 
 const BRANCHES = [
   'Computer Science',
@@ -127,19 +128,8 @@ const QuantumRegister = () => {
   return (
     <div className="team-register-page">
       {/* NAVBAR */}
-      <nav className="navbar">
-        <div className="nav-left">
-          <img src="/quimicaLogoWhite.png" alt="logo" />
-          <h2>QUIMICA</h2>
-        </div>
-        <div className={`menu-icon ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(!menuOpen)}>☰</div>
-        <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
-          <li><NavLink to="/" onClick={() => setMenuOpen(false)}>Home</NavLink></li>
-          <li><NavLink to="/quimica26" onClick={() => setMenuOpen(false)}>Quimica'26</NavLink></li>
-          <li><NavLink to="/contact" onClick={() => setMenuOpen(false)}>Contact</NavLink></li>
-        </ul>
-      </nav>
-
+      <Navbar />
+      
       <div className="team-form-container">
         <div className="team-form-header">
           <h1>Register for Quantum</h1>

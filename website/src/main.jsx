@@ -9,6 +9,10 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 
+//Common Components
+import Navbar from "./pages/navbar";
+import Footer from "./pages/footer";
+
 // Public pages
 import HomePage from './pages/homePage';
 import OurTeam from './pages/ourTeam';
