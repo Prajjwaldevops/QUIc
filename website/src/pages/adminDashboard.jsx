@@ -230,7 +230,7 @@ const AdminDashboard = () => {
                       </td>
                       <td>
                         {t.draft_url ? (
-                          <span className="badge-submitted">Submitted</span>
+                          <a href={t.draft_url} target="_blank" rel="noopener noreferrer" className="badge-submitted" style={{ textDecoration: 'none' }}>View Draft</a>
                         ) : (
                           <span className="badge-pending">Pending</span>
                         )}

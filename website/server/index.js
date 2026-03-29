@@ -1,13 +1,18 @@
 // Express proxy server for Cloudflare R2 file uploads
 // Run separately: node server/index.js
 
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { randomUUID } from 'crypto';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../.env.local') });
 
 const app = express();
 const PORT = process.env.UPLOAD_PORT || 3001;
@@ -46,9 +51,14 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
       return res.status(400).json({ error: 'File size exceeds 5 MB limit' });
     }
 
+    // Check if file is a PDF
+    if (req.file.mimetype !== 'application/pdf') {
+      return res.status(400).json({ error: 'Only PDF files are allowed' });
+    }
+
     const teamId = req.body.team_id || 'unknown';
-    const ext = path.extname(req.file.originalname);
-    const key = `drafts/${teamId}/${randomUUID()}${ext}`;
+    const safeTeamId = teamId.replace('#', '');
+    const key = `${safeTeamId}/draft_${randomUUID()}.pdf`;
 
     await r2.send(new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
@@ -57,7 +67,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
       ContentType: req.file.mimetype,
     }));
 
-    const publicUrl = `${process.env.R2_PUBLIC_URL}/${key}`;
+    const publicUrl = `${process.env.R2_PUBLIC_URL.replace(/\/$/, '')}/${key}`;
 
     res.json({ url: publicUrl, key });
   } catch (err) {

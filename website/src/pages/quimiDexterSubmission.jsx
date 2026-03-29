@@ -47,6 +47,11 @@ const QuimiDexterSubmission = () => {
     setError('');
     if (!selectedFile) return;
 
+    if (selectedFile.type !== 'application/pdf') {
+      setError('Only PDF files are allowed.');
+      return;
+    }
+
     // 5 MB limit
     if (selectedFile.size > 5 * 1024 * 1024) {
       setError('File size exceeds 5 MB limit. Please choose a smaller file.');
@@ -207,6 +212,7 @@ const QuimiDexterSubmission = () => {
               <input
                 ref={fileInputRef}
                 type="file"
+                accept=".pdf,application/pdf"
                 onChange={(e) => handleFileSelect(e.target.files[0])}
               />
             </div>
