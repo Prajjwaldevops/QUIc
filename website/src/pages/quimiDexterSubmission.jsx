@@ -75,36 +75,50 @@ const QuimiDexterSubmission = () => {
     setProgress(10);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('team_id', team.team_id);
-      formData.append('team_name', team.team_name);
-
-      // Simulate progress
+      // Simulate progress for presign
       const progressInterval = setInterval(() => {
-        setProgress((p) => Math.min(p + 10, 80));
+        setProgress((p) => Math.min(p + 10, 40));
       }, 300);
 
-      const response = await fetch('/api/upload', {
+      // 1. Get presigned URL
+      const presignRes = await fetch('/api/presign', {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          team_id: team.team_id,
+          filename: file.name,
+          contentType: file.type || 'application/pdf',
+        }),
+      });
+
+      if (!presignRes.ok) {
+        clearInterval(progressInterval);
+        const errData = await presignRes.json().catch(() => ({}));
+        throw new Error(errData.error || 'Failed to initialize upload');
+      }
+
+      const { presignedUrl, publicUrl } = await presignRes.json();
+
+      // 2. Upload file directly to R2
+      const uploadRes = await fetch(presignedUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type || 'application/pdf' },
+        body: file,
       });
 
       clearInterval(progressInterval);
 
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.error || 'Upload failed');
+      if (!uploadRes.ok) {
+        throw new Error('Upload to storage failed');
       }
 
-      const data = await response.json();
       setProgress(90);
 
-      // Update team record with draft URL
+      // 3. Update team record with draft URL
       const { error: updateError } = await supabase
         .from('quimi_dexter_teams')
         .update({
-          draft_url: data.url,
+          draft_url: publicUrl,
           draft_submitted_at: new Date().toISOString(),
         })
         .eq('team_id', team.team_id);
@@ -192,9 +206,22 @@ const QuimiDexterSubmission = () => {
         ) : (
           <>
             {error && (
-              <div className="auth-error">
-                <i className="fas fa-exclamation-circle"></i>
-                {error}
+              <div className="auth-error" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div>
+                  <i className="fas fa-exclamation-circle"></i>
+                  {error}
+                </div>
+                <div style={{ textAlign: 'center', marginTop: '5px', fontSize: '14px' }}>
+                  <strong>Upload Failed ?</strong>{' '}
+                  <a 
+                    href="https://wa.me/916204413032" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    style={{ color: '#ffb347', textDecoration: 'underline' }}
+                  >
+                    Contact Support
+                  </a>
+                </div>
               </div>
             )}
 
