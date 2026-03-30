@@ -126,10 +126,10 @@ const Quimica26 = () => {
         {/* Quimi Dexter */}
         <div className="q26-card">
           <div className="q26-card-img">
-            <img src="/assets/Quimica25.jpg" alt="Quimi Dexter" />
+            <img src="/assets/Q5-01.jpg" alt="Quimi Dexter" />
           </div>
           <h3>Quimi Dexter</h3>
-          <p>Team-based event. Form a team of 4 and showcase your chemical engineering prowess.</p>
+          <p>Team-based event. Form a team of 4 and showcase your engineering and industrial prowess.</p>
           <div className="q26-card-actions">
             <button className="q26-btn q26-btn-primary" onClick={handleQuimiDexterRegister}>
               {hasTeam ? 'View Team ID' : 'Register for Quimi Dexter'}
