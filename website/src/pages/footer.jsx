@@ -39,10 +39,10 @@ import {
         </div>
 
         <div className="footer-right">
-          <h2>CONTACT US</h2>
+          <h2>CONTACT <span style={{color:"#ff7a00"}}>US</span></h2>
           <p>KARTIK KUMAR (2K22) <p> +91 9142779272</p></p>
-          <p>BABAN KUMAR GUPTA (2K23) <p>+91 9113391259</p></p>
-          <p>PRAJJWAL JHA (2K24) <p>+91 6204413032</p></p>
+          <p>RAJ KUMAR BARNWAL (2K23) <p>+91 7667010887</p></p>
+          {/* <p>PRAJJWAL JHA (2K24) <p>+91 6204413032</p></p> */}
         </div>
       </footer>
     </div>

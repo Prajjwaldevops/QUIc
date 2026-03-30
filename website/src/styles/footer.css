@@ -11,6 +11,7 @@
   flex-wrap: wrap;
   border: 2px solid #ff7a00;
   border-radius: 30px;
+    box-shadow: 0 0 20px rgba(255, 122, 0, 0.3);
 }
 
 .footer-left img {

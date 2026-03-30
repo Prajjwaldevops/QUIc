@@ -104,6 +104,155 @@
 }
 
 /* ================= FEATURED ================= */
+
+
+
+
+
+
+/* App.css */
+/* .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1e1e1e;
+}
+
+.featured-image {
+  display: inline-block;
+  padding: 4px; /* space for the border */
+  /* border-radius: 12px; */
+  /* background: linear-gradient(90deg, #ff3c78, #ffb347, #3cffc8, #3c6fff, #ff3c78); */
+  /* background-size: 400% 400%; */
+  /* animation: borderMove 4s linear infinite; */
+/* } */ */
+
+/* .newPhoto { */
+  /* display: block; */
+  /* width: 300px; */
+  /* height: auto; */
+  /* border-radius: 8px; slightly smaller than container for inner image */
+/* } */
+/* 
+@keyframes borderMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+} */
+
+
+
+
+
+
+/* App.css */
+
+/* General poster styles (assuming same as other posters) */
+
+
+
+
+
+.featured-image img,
+.moving-border-poster img {
+  display: block;
+  /* width: 150px; */
+  height: auto;
+    width: 280px !important;
+  height: 280px !important;
+  border-radius: 8px;
+}
+
+/* New moving border poster */
+.moving-border-poster {
+  position: relative;
+  display: inline-block;
+  padding: 8px;
+  border-radius: 12px;
+}
+
+/* DOTTED BORDER LAYER */
+/* .moving-border-poster {
+  position: relative;
+  display: inline-block;
+  padding: 6px;
+  border-radius: 14px;
+  overflow: hidden;
+} */
+
+/* ROTATING DOTTED BORDER */
+/* .moving-border-poster::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+
+  background: repeating-conic-gradient(
+    #ff7a00 0deg 10deg,
+    transparent 10deg 20deg
+  );
+
+  animation: rotateDots 3s linear infinite;
+  z-index: 0;
+} */
+
+/* INNER BOX (to create border effect) */
+/* .moving-border-poster::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background: #0b0603; 
+  border-radius: 10px;
+  z-index: 1;
+} */
+
+/* IMAGE */
+/* .moving-border-poster img {
+  position: relative;
+  z-index: 2;
+  width: 280px;
+  height: 280px;
+  border-radius: 8px;
+  padding: 10px;
+} */
+
+/* ANIMATION */
+/* @keyframes rotateDots {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .featured-event {
   max-width: 1100px;
   margin: 50px auto;

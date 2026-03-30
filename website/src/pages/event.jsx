@@ -118,6 +118,19 @@ useEffect(() => {
       </section>
 
       {/* ================= FEATURED EVENTS ================= */}
+
+
+
+
+
+ 
+
+
+
+
+
+
+
       <section className="featured-event">
         <div className="featured-image">
           <img src="/assets/Quimica25.jpg" alt="QUIMICA'25" />
