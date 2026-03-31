@@ -4,47 +4,59 @@ import Navbar from "./navbar";
 import Footer from "./footer";
 
 /* 🔥 CONFIG */
-const Section1 = [
+const SECTIONS = [
   {
     title: "Orientation 25",
     folder: "Orientation25",
     images: [
-      { src: "image1.jpg"},
-      { src: "image2.jpg"},
-      { src: "image3.jpg"},
-      { src: "img_4.jpg"},
-      { src: "img_5.jpg"},
-      { src: "img_6.jpg"},
+      "image1.jpg",
+      "image2.jpg",
+      "image3.jpg",
+      "image4.jpg",
+      "image5.jpg",
+      "image6.jpeg",
+      "image7.jpg",
+      "image8.jpeg",
+      "image9.jpeg",
+      "image10.jpeg",
+      "image11.jpeg",
+      "image12.jpeg",
+      "image13.jpeg",
+      "image14.jpeg",
+      "image15.jpeg",
+      "image16.jpeg",
+      "image17.jpg",
     ],
   },
-];
-
-const Section2 = [
   {
-    title: "QUIMICA 25",
+    title: "Quimica 25",
     folder: "Quimica25",
     images: [
-      { src: "image1.jpg"},
-      { src: "image2.jpg"},
-      { src: "image3.jpg"},
-      { src: "image4.jpg"},
-      { src: "img_5.jpg"},
-      { src: "img_6.jpg"},
+      "image1.jpg",
+      "image2.jpg",
+      "image3.jpg",
+      "image4.jpg",
+      "image5.jpg",
+      "image6.jpg",
+      "image7.jpg",
+      "image8.jpg",
+      "image9.jpg",
+      "image10.jpg",
+      "image11.jpg",
+      "image12.jpg",
+      "image13.jpg",
     ],
   },
-];
-
-const Section3 = [
   {
-    title: "QUIMICA 23",
+    title: "Quimica 23",
     folder: "Quimica23",
     images: [
-      { src: "image1.jpg"},
-      { src: "image2.jpg"},
-      { src: "image3.jpg"},
-      { src: "image4.jpg"},
-      { src: "image5.jpg"},
-      { src: "image6.jpg"},
+      "image1.jpg",
+      "image2.jpg",
+      "image3.jpg",
+      "image4.jpg",
+      "image5.jpg",
+      "image6.jpg",
     ],
   },
 ];
@@ -52,65 +64,48 @@ const Section3 = [
 const BASE_PATH = "/assets/gallery/";
 
 const Gallery = () => {
-  useEffect(() => window.scrollTo(0, 0), []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  /* 🔁 fallback for wrong extensions */
+  const handleImageError = (e, folder, img) => {
+    const base = `${BASE_PATH}${folder}/`;
+    if (!e.target.src.includes(".jpeg")) {
+      e.target.src = base + img.replace(".jpg", ".jpeg");
+    } else if (!e.target.src.includes(".png")) {
+      e.target.src = base + img.replace(".jpg", ".png");
+    }
+  };
 
   return (
     <div className="gallery-page">
       <Navbar />
 
+      {/* HEADER */}
       <section className="gallery-header">
         <h1>GALLERY</h1>
       </section>
 
-      <h1 className="section-heading">Quimica 25</h1>
-      {Section1.map((section, index) => (
-        <div key={index} className="gallery-grid">
-          {section.images.map((img, i) => (
-            <div key={i} className="gallery-card">
-              <img
-                src={`${BASE_PATH}${section.folder}/${img.src}`}
-                alt={img.label}
-              />
-              <div className="overlay">
-                <p>{img.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      ))}
+      {/* 🔥 SECTIONS LOOP */}
+      {SECTIONS.map((section, index) => (
+        <div key={index} className="gallery-section">
+          <h2 className="section-heading">{section.title}</h2>
 
-
-      <h1 className="section-heading">Orientation 25</h1>
-      {Section2.map((section, index) => (
-        <div key={index} className="gallery-grid">
-          {section.images.map((img, i) => (
-            <div key={i} className="gallery-card">
-              <img
-                src={`${BASE_PATH}${section.folder}/${img.src}`}
-                alt={img.label}
-              />
-              <div className="overlay">
-                <p>{img.label}</p>
+          <div className="masonry-grid">
+            {section.images.map((img, i) => (
+              <div key={i} className="masonry-item">
+                <img
+                  src={`${BASE_PATH}${section.folder}/${img}`}
+                  alt="gallery"
+                  loading="lazy"
+                  onError={(e) =>
+                    handleImageError(e, section.folder, img)
+                  }
+                />
               </div>
-            </div>
-          ))}
-        </div>
-      ))}
-
-      <h1 className="section-heading">Quimica 23</h1>
-      {Section3.map((section, index) => (
-        <div key={index} className="gallery-grid">
-          {section.images.map((img, i) => (
-            <div key={i} className="gallery-card">
-              <img
-                src={`${BASE_PATH}${section.folder}/${img.src}`}
-                alt={img.label}
-              />
-              <div className="overlay">
-                <p>{img.label}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       ))}
 

@@ -1,132 +1,94 @@
-/* 🌌 PAGE BACKGROUND */
+/* 🔥 PAGE BACKGROUND */
 .gallery-page {
-  background: radial-gradient(circle at top, #1a0b03, #000000 70%);
-  padding-bottom: 80px;
-  color: #fff;
+  background: #0b0b0b;
+  color: #e5e5e5;
+  min-height: 100vh;
+  padding-bottom: 60px;
 }
 
 /* HEADER */
 .gallery-header {
-  padding: 50px 60px 20px;
-}
-
-.gallery-page .section-heading h1{
+  padding: 60px 20px 30px;
   text-align: center;
 }
 
 .gallery-header h1 {
-  font-size: 30px;
-  font-weight: 500;
-  letter-spacing: 3px;
+  font-size: 36px;
+  font-weight: 700;
   color: #ffffff;
-  position: relative;
+  letter-spacing: 1px;
 }
 
-/* subtle underline glow */
-.gallery-header h1::after {
-  content: "";
-  display: block;
-  width: 60px;
-  height: 2px;
-  margin-top: 10px;
-  background: #ff7a00;
-  box-shadow: 0 0 10px rgba(255, 122, 0, 0.8);
+/* SECTION */
+.gallery-section {
+  max-width: 85rem;
+  margin: auto;
+  padding: 20px;
+}
+.gallery-section h2 {
+  text-align: center;
 }
 
-/* 🔲 GRID */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-  padding: 30px 60px;
+/* SECTION TITLE */
+.section-heading {
+  font-size: 24px;
+  margin: 40px 0 20px;
+  font-weight: 600;
+  color: #f97316; /* 🔥 orange accent */
 }
 
-/* 🧡 CARD */
-.gallery-card {
-  position: relative;
+/* 🔥 MASONRY GRID */
+.masonry-grid {
+  column-count: 2;
+  column-gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    column-count: 4;
+  }
+}
+
+/* ITEM */
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 12px;
+  border-radius: 12px;
   overflow: hidden;
-  cursor: pointer;
-  border-radius: 10px;
-
-  background: #0d0602;
-  border: 1px solid rgba(255, 122, 0, 0.25);
-
-  transition: all 0.4s ease;
-}
-
-/* 🔥 GLOW ON HOVER */
-.gallery-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 0 25px rgba(255, 122, 0, 0.6);
+  background: #111;
+  box-shadow: 0 0 0 rgba(249, 115, 22, 0);
+  transition: all 0.3s ease;
 }
 
 /* IMAGE */
-.gallery-card img {
+.masonry-item img {
   width: 100%;
-  height: 230px;
-  object-fit: cover;
-  transition: transform 0.5s ease, opacity 0.3s;
+  display: block;
+  border-radius: 12px;
+  transition: all 0.4s ease;
 }
 
-/* ZOOM + DARKEN */
-.gallery-card:hover img {
-  transform: scale(1.08);
-  opacity: 0.75;
+/* 🔥 HOVER MAGIC */
+.masonry-item:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(249, 115, 22, 0.25);
 }
 
-/* 🌒 OVERLAY */
-.overlay {
+.masonry-item:hover img {
+  filter: brightness(0.85);
+}
+
+/* OPTIONAL: subtle glow effect */
+.masonry-item::after {
+  content: "";
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 14px;
-
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.85),
-    rgba(0, 0, 0, 0.2),
-    transparent
-  );
-
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  inset: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 0 rgba(249, 115, 22, 0.4);
+  transition: 0.3s;
 }
 
-/* SHOW TEXT */
-.gallery-card:hover .overlay {
-  opacity: 1;
-}
-
-/* TEXT STYLE */
-.overlay p {
-  font-size: 14px;
-  margin: 0;
-  letter-spacing: 0.5px;
-  color: #ffb066;
-}
-
-/* ✨ OPTIONAL: subtle glow text */
-.gallery-card:hover .overlay p {
-  text-shadow: 0 0 8px rgba(255, 122, 0, 0.8);
-}
-
-/* 📱 RESPONSIVE */
-@media (max-width: 900px) {
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 20px 30px;
-  }
-}
-
-@media (max-width: 500px) {
-  .gallery-grid {
-    grid-template-columns: 1fr;
-    padding: 20px;
-  }
-
-  .gallery-header {
-    padding: 30px 20px 10px;
-  }
+.masonry-item:hover::after {
+  box-shadow: inset 0 0 20px rgba(249, 115, 22, 0.2);
 }
