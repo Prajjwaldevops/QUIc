@@ -128,7 +128,7 @@ const HomePage = () => {
 
     {/* LEFT SIDE → Poster with border */}
     <div className="event-poster moving-border-poster">
-      <img src="/assets/Quimica26.png" alt="Quimica 26" />
+      <img src="/assets/quimica2k26.jpeg" alt="Quimica 26" />
     </div>
 
     {/* RIGHT SIDE → (optional, if you want same layout) */}
