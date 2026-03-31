@@ -3,7 +3,7 @@
 
 /* ================= FOOTER ================= */
 .footer {
-  margin: 30px;
+  margin: 40px;
   padding: 40px;
   display: flex;
   gap: 50px;
@@ -11,7 +11,7 @@
   flex-wrap: wrap;
   border: 2px solid #ff7a00;
   border-radius: 30px;
-    box-shadow: 0 0 20px rgba(255, 122, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 122, 0, 0.3);
 }
 
 .footer-left img {
@@ -100,31 +100,72 @@
   }
 
   .footer {
-    margin: 20px;
-    padding: 30px;
+  margin: 18px;
+  padding: 20px;
+  display: flex;
+  gap: 25px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  }
+
+  /* .footer {
+    margin: 90px;
+    padding: 20px;
     flex-direction: column;
     align-items: center;
     text-align: center;
     margin: 0 0;
-  }
+    gap: 25px;
+  } */
 
 .footer-left img {
-  width: 50px;
-  margin-bottom: 10px;
+  width: 40px;
+  margin-bottom: 4px;
 }
+
+.footer-left h4 {
+  font-size: 0.8rem;
+}
+
+.footer-left p {
+  font-size: 0.8rem;
+}
+
 
 /* Container styling */
 .footer-center {
   text-align: center;
-  padding: 15px;
+  padding: 2px;
   font-family: 'Arial', sans-serif; /* Replace with your project font */
+}
+
+.footer-center h4 {
+  margin-bottom: 10px;
+  color: #F97316; /* Dark gray for the title */
+  font-size: 1.1rem;
 }
 
 /* Flexbox layout for the icons */
 .social-icons {
   display: flex;
   justify-content: center;
-  gap: 10px; /* Spacing between icons */
+  gap: 6px; /* Spacing between icons */
+}
+
+.social-icons a {
+  width: 30px;
+  height: 30px;
+  gap: 10px;
+}
+
+
+.footer-right h2{
+  font-size: 1.4 rem;
+}
+
+
+.footer-right p {
+  font-size: 0.8rem;
 }
 
 
