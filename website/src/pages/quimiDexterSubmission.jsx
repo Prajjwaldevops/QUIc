@@ -81,30 +81,42 @@ const QuimiDexterSubmission = () => {
       }, 300);
 
       // 1. Get presigned URL
-      const presignRes = await fetch('/api/presign', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          team_id: team.team_id,
-          filename: file.name,
-          contentType: file.type || 'application/pdf',
-        }),
-      });
+      let presignRes;
+      try {
+        presignRes = await fetch('/api/presign', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            team_id: team.team_id,
+            filename: file.name,
+            contentType: file.type || 'application/pdf',
+          }),
+        });
+      } catch (networkErr) {
+        clearInterval(progressInterval);
+        throw new Error('Network error: Could not reach the server. Please check your internet connection and try again.');
+      }
 
       if (!presignRes.ok) {
         clearInterval(progressInterval);
         const errData = await presignRes.json().catch(() => ({}));
-        throw new Error(errData.error || 'Failed to initialize upload');
+        throw new Error(errData.error || `Server error (${presignRes.status})`);
       }
 
       const { presignedUrl, publicUrl } = await presignRes.json();
 
       // 2. Upload file directly to R2
-      const uploadRes = await fetch(presignedUrl, {
-        method: 'PUT',
-        headers: { 'Content-Type': file.type || 'application/pdf' },
-        body: file,
-      });
+      let uploadRes;
+      try {
+        uploadRes = await fetch(presignedUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': file.type || 'application/pdf' },
+          body: file,
+        });
+      } catch (uploadNetworkErr) {
+        clearInterval(progressInterval);
+        throw new Error('Upload failed: Could not connect to storage. Please try again.');
+      }
 
       clearInterval(progressInterval);
 
