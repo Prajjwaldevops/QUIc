@@ -52,9 +52,9 @@ const QuimiDexterSubmission = () => {
       return;
     }
 
-    // 10 MB limit
-    if (selectedFile.size > 10 * 1024 * 1024) {
-      setError('File size exceeds 10 MB limit. Please choose a smaller file.');
+    // 5 MB limit (Vercel serverless function body limit)
+    if (selectedFile.size > 5 * 1024 * 1024) {
+      setError('File size exceeds 5 MB limit. Please choose a smaller file.');
       return;
     }
 
@@ -75,58 +75,39 @@ const QuimiDexterSubmission = () => {
     setProgress(10);
 
     try {
-      // Simulate progress for presign
+      // Animate progress
       const progressInterval = setInterval(() => {
-        setProgress((p) => Math.min(p + 10, 40));
-      }, 300);
+        setProgress((p) => Math.min(p + 5, 80));
+      }, 400);
 
-      // 1. Get presigned URL
-      let presignRes;
+      // 1. Upload file through server proxy (avoids R2 CORS issues)
+      let uploadRes;
       try {
-        presignRes = await fetch('/api/presign', {
+        uploadRes = await fetch('/api/upload', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            team_id: team.team_id,
-            filename: file.name,
-            contentType: file.type || 'application/pdf',
-          }),
+          headers: {
+            'Content-Type': 'application/pdf',
+            'x-team-id': team.team_id,
+            'x-filename': file.name,
+          },
+          body: file,
         });
       } catch (networkErr) {
         clearInterval(progressInterval);
         throw new Error('Network error: Could not reach the server. Please check your internet connection and try again.');
       }
 
-      if (!presignRes.ok) {
-        clearInterval(progressInterval);
-        const errData = await presignRes.json().catch(() => ({}));
-        throw new Error(errData.error || `Server error (${presignRes.status})`);
-      }
-
-      const { presignedUrl, publicUrl } = await presignRes.json();
-
-      // 2. Upload file directly to R2
-      let uploadRes;
-      try {
-        uploadRes = await fetch(presignedUrl, {
-          method: 'PUT',
-          headers: { 'Content-Type': file.type || 'application/pdf' },
-          body: file,
-        });
-      } catch (uploadNetworkErr) {
-        clearInterval(progressInterval);
-        throw new Error('Upload failed: Could not connect to storage. Please try again.');
-      }
-
       clearInterval(progressInterval);
 
       if (!uploadRes.ok) {
-        throw new Error('Upload to storage failed');
+        const errData = await uploadRes.json().catch(() => ({}));
+        throw new Error(errData.error || `Upload failed (${uploadRes.status})`);
       }
 
+      const { url: publicUrl } = await uploadRes.json();
       setProgress(90);
 
-      // 3. Update team record with draft URL
+      // 2. Update team record with draft URL
       const { error: updateError } = await supabase
         .from('quimi_dexter_teams')
         .update({
@@ -182,7 +163,7 @@ const QuimiDexterSubmission = () => {
         <div className="submission-header">
           <h1>Submit Draft — Quimi Dexter</h1>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px' }}>
-            Upload your team's draft (max 5 MB)
+            Upload your team's draft (PDF, max 5 MB)
           </p>
         </div>
 
@@ -247,7 +228,7 @@ const QuimiDexterSubmission = () => {
             >
               <span className="upload-icon">📄</span>
               <h4>Drag & drop your file here</h4>
-              <p>or click to browse • Max size: 10 MB</p>
+              <p>or click to browse • Max size: 5 MB</p>
               <input
                 ref={fileInputRef}
                 type="file"
