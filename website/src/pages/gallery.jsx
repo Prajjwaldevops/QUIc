@@ -9,13 +9,13 @@ const SECTIONS = [
     title: "Orientation 25",
     folder: "Orientation25",
     images: [
-      "image1.jpg",
-      "image2.jpg",
-      "image3.jpg",
-      "image4.jpg",
-      "image5.jpg",
+      "image1.JPG",
+      "image2.JPG",
+      "image3.JPG",
+      "image4.JPG",
+      "image5.JPG",
       "image6.jpeg",
-      "image7.jpg",
+      "image7.JPG",
       "image8.jpeg",
       "image9.jpeg",
       "image10.jpeg",
@@ -25,26 +25,30 @@ const SECTIONS = [
       "image14.jpeg",
       "image15.jpeg",
       "image16.jpeg",
-      "image17.jpg",
+      "image17.JPG",
     ],
   },
   {
     title: "Quimica 25",
     folder: "Quimica25",
     images: [
-      "image1.jpg",
-      "image2.jpg",
-      "image3.jpg",
-      "image4.jpg",
-      "image5.jpg",
-      "image6.jpg",
-      "image7.jpg",
-      "image8.jpg",
-      "image9.jpg",
-      "image10.jpg",
-      "image11.jpg",
-      "image12.jpg",
-      "image13.jpg",
+      "image1.JPG",
+      "image2.JPG",
+      "image3.JPG",
+      "image4.JPG",
+      "image5.JPG",
+      "image6.JPG",
+      "image7.JPG",
+      "image8.JPG",
+      "image9.JPG",
+      "image10.JPG",
+      "image11.JPG",
+      "image12.JPG",
+      "image13.JPG",
+      "image14.JPG",
+      "image15.JPG",
+      "image16.JPG",
+      "image17.JPG",
     ],
   },
   {
@@ -70,13 +74,18 @@ const Gallery = () => {
 
   /* 🔁 fallback for wrong extensions */
   const handleImageError = (e, folder, img) => {
-    const base = `${BASE_PATH}${folder}/`;
-    if (!e.target.src.includes(".jpeg")) {
-      e.target.src = base + img.replace(".jpg", ".jpeg");
-    } else if (!e.target.src.includes(".png")) {
-      e.target.src = base + img.replace(".jpg", ".png");
-    }
-  };
+  const base = `${BASE_PATH}${folder}/`;
+
+  if (!e.target.dataset.fallback) {
+    e.target.dataset.fallback = "jpeg";
+    e.target.src = base + img.replace(/\.\w+$/, ".jpeg");
+  } else if (e.target.dataset.fallback === "jpeg") {
+    e.target.dataset.fallback = "png";
+    e.target.src = base + img.replace(/\.\w+$/, ".png");
+  } else {
+    e.target.style.display = "none"; // hide broken image
+  }
+};
 
   return (
     <div className="gallery-page">

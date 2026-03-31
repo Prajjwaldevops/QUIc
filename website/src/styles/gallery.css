@@ -81,7 +81,7 @@
 /* OPTIONAL: subtle glow effect */
 .masonry-item::after {
   content: "";
-  position: absolute;
+  position: relative;
   inset: 0;
   border-radius: 12px;
   pointer-events: none;
