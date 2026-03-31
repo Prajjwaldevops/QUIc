@@ -15,45 +15,57 @@ const CourseStructure = () => {
   const course = [
     {
       title: "FIRST SEMESTER",
-      description: "Solve real-world chemical engineering problems in teams.",
       image: "/assets/sem1.jpg",
     },
     {
       title: "SECOND SEMESTER",
-      description: "Solve real-world chemical engineering problems in teams.",
       image: "/assets/sem2.jpg",
     },
     {
       title: "THIRD SEMESTER",
-      description: "Solve real-world chemical engineering problems in teams.",
       image: "/assets/sem3.jpg",
     },
     {
       title: "FOURTH SEMESTER",
-      description: "Solve real-world chemical engineering problems in teams.",
       image: "/assets/sem4.jpg",
     },
     {
       title: "FIFTH SEMESTER",
-      description: "Solve real-world chemical engineering problems in teams.",
       image: "/assets/sem5.jpg",
     },
     {
       title: "SIXTH SEMESTER",
-      description: "Solve real-world chemical engineering problems in teams.",
       image: "/assets/sem6.jpg",
     },
     {
       title: "SEVENTH SEMESTER",
-      description: "Solve real-world chemical engineering problems in teams.",
       image: "/assets/sem7.jpg",
     },
     {
       title: "EIGHTH SEMESTER",
-      description: "Solve real-world chemical engineering problems in teams.",
       image: "/assets/sem28.jpg",
     },
   ];
+
+  useEffect(() => {
+  const reveals = document.querySelectorAll(".reveal");
+
+  const revealOnScroll = () => {
+    reveals.forEach((el) => {
+      const windowHeight = window.innerHeight;
+      const elementTop = el.getBoundingClientRect().top;
+
+      if (elementTop < windowHeight - 100) {
+        el.classList.add("active");
+      }
+    });
+  };
+
+  window.addEventListener("scroll", revealOnScroll);
+  revealOnScroll(); // trigger once on load
+
+  return () => window.removeEventListener("scroll", revealOnScroll);
+}, []);
 
   return (
     <div className="course-page">

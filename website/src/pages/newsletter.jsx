@@ -22,7 +22,7 @@ import Footer from "./footer";
   {
     title: "NEWSLETTER 2024",
     image: "/assets/magazine24.png",
-    pdf: "/assets/magazine2024.pdf",
+    pdf: "/assets/magazine24.pdf",
     downloadName: "QUIMICA_Magazine24.pdf",
   },
   {

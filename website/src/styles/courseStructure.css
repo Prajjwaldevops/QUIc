@@ -15,10 +15,8 @@
   padding: 90px 20px;
   text-align: center;
   color: white;
-
-  /* base dark background */
-  background: #050505;
-
+  padding: 100px 20px;
+  background: linear-gradient(135deg, #0e0601, #050200);
   /* smooth gradient glow */
   background-image: 
     radial-gradient(circle at center, rgba(255,120,0,0.15), transparent 60%),
@@ -51,14 +49,8 @@
   opacity: 0.75;
   max-width: 700px;
   margin: 0 auto;
-}
-
-.course-page .team-hero {
-  text-align: center;
-  margin-top: 60px;
-  padding: 100px 20px;
-  background: linear-gradient(135deg, #0e0601, #050200);
-  color: white;
+  font-size: 18px;
+  opacity: 0.8;
 }
 
 .course-page .team-hero h1 {
@@ -66,9 +58,27 @@
   margin-bottom: 10px;
 }
 
-.course-page .team-hero p {
-  font-size: 18px;
-  opacity: 0.8;
+.reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal-left {
+  transform: translateX(-80px);
+}
+
+.reveal-right {
+  transform: translateX(80px);
+}
+
+.reveal-top {
+  transform: translateY(-80px);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
 }
 
 
