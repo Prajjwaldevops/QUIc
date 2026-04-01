@@ -18,7 +18,7 @@ img {
 /* ================= NAVBAR ================= */
 
 .home .hero {
-  margin-top: 60px;
+  margin-top: 30px;
   padding: 20px;
 }
 
@@ -37,6 +37,7 @@ img {
 
 .home .hero-video {
   position: absolute;
+  margin-top: 70px;
   top: 0;
   left: 0;
 

@@ -15,7 +15,7 @@ import Footer from "./footer";
   const newsletters = [
   {
     title: "NEWSLETTER 2025",
-    image: "/assets/magazine25.png",
+    image: "/assets/magazine25.jpg",
     pdf: "/assets/magazine25.pdf",
     downloadName: "QUIMICA_Magazine25.pdf",
   },
