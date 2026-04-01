@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -21,10 +21,14 @@ const BRANCHES = [
   'Production',
 ];
 
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 500;
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 const QuantumRegister = () => {
   const navigate = useNavigate();
   const { userProfile } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false);
   const [form, setForm] = useState({
     name: '', email: '', phone: '', roll_number: '',
     registration_number: '', gender: '', branch: '', batch: '',
@@ -32,6 +36,9 @@ const QuantumRegister = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
+
+  // Mutex ref to prevent double-submit
+  const submittingRef = useRef(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -51,13 +58,18 @@ const QuantumRegister = () => {
   }, [userProfile]);
 
   const checkExisting = async () => {
-    const { data } = await supabase
-      .from('quantum_registrations')
-      .select('uid')
-      .eq('user_email', userProfile.email);
+    try {
+      const { data } = await supabase
+        .from('quantum_registrations')
+        .select('uid')
+        .eq('user_email', userProfile.email);
 
-    if (data && data.length > 0) {
-      navigate('/quimica26/quantum/uid', { replace: true });
+      if (data && data.length > 0) {
+        navigate('/quimica26/quantum/uid', { replace: true });
+        return;
+      }
+    } catch (err) {
+      console.error('Error checking existing registration:', err);
     }
     setChecking(false);
   };
@@ -65,6 +77,11 @@ const QuantumRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Prevent double-submit via mutex
+    if (submittingRef.current) {
+      return;
+    }
 
     if (!form.name || !form.email || !form.phone || !form.roll_number ||
         !form.registration_number || !form.gender || !form.branch || !form.batch) {
@@ -77,48 +94,102 @@ const QuantumRegister = () => {
       return;
     }
 
+    submittingRef.current = true;
     setLoading(true);
 
     try {
-      // Generate UID
-      const { data: uidData, error: rpcError } = await supabase.rpc('generate_quantum_uid');
-      if (rpcError) {
-        setError('Failed to generate unique ID. Please try again.');
-        setLoading(false);
+      // First, double-check if already registered (race-condition guard)
+      const { data: existingCheck } = await supabase
+        .from('quantum_registrations')
+        .select('uid')
+        .eq('user_email', form.email.toLowerCase());
+
+      if (existingCheck && existingCheck.length > 0) {
+        navigate('/quimica26/quantum/uid', { replace: true });
         return;
       }
 
-      // Insert registration
-      const { error: insertError } = await supabase.from('quantum_registrations').insert({
-        uid: uidData,
-        user_email: form.email.toLowerCase(),
-        name: form.name,
-        email: form.email.toLowerCase(),
-        phone: form.phone,
-        roll_number: form.roll_number.toUpperCase(),
-        registration_number: form.registration_number.toUpperCase(),
-        gender: form.gender,
-        branch: form.branch,
-        batch: form.batch,
-      });
+      // Retry loop for UID generation + insert (handles concurrent requests)
+      let lastError = null;
+      for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        try {
+          // Generate UID via server-side RPC (atomic)
+          const { data: uidData, error: rpcError } = await supabase.rpc('generate_quantum_uid');
+          if (rpcError) {
+            lastError = rpcError;
+            console.warn(`UID generation attempt ${attempt} failed:`, rpcError.message);
+            if (attempt < MAX_RETRIES) {
+              await sleep(RETRY_DELAY_MS * attempt); // Exponential backoff
+              continue;
+            }
+            break;
+          }
 
-      if (insertError) {
-        if (insertError.message.includes('duplicate')) {
+          // Insert registration
+          const { error: insertError } = await supabase.from('quantum_registrations').insert({
+            uid: uidData,
+            user_email: form.email.toLowerCase(),
+            name: form.name,
+            email: form.email.toLowerCase(),
+            phone: form.phone,
+            roll_number: form.roll_number.toUpperCase(),
+            registration_number: form.registration_number.toUpperCase(),
+            gender: form.gender,
+            branch: form.branch,
+            batch: form.batch,
+          });
+
+          if (insertError) {
+            // If duplicate key on uid, retry with a new UID
+            if (insertError.message && (insertError.message.includes('duplicate') || insertError.message.includes('unique') || insertError.code === '23505')) {
+              // Check if it's a duplicate on user_email (already registered)
+              if (insertError.message.includes('user_email') || insertError.message.includes('email')) {
+                navigate('/quimica26/quantum/uid', { replace: true });
+                return;
+              }
+              // Duplicate on uid — retry with new UID
+              lastError = insertError;
+              console.warn(`Insert attempt ${attempt} hit UID collision, retrying...`);
+              if (attempt < MAX_RETRIES) {
+                await sleep(RETRY_DELAY_MS * attempt);
+                continue;
+              }
+              break;
+            }
+            // Other insert error
+            lastError = insertError;
+            break;
+          }
+
+          // Success!
+          navigate('/quimica26/quantum/uid', { replace: true });
+          return;
+        } catch (innerErr) {
+          lastError = innerErr;
+          console.warn(`Attempt ${attempt} threw:`, innerErr);
+          if (attempt < MAX_RETRIES) {
+            await sleep(RETRY_DELAY_MS * attempt);
+          }
+        }
+      }
+
+      // All retries exhausted
+      if (lastError) {
+        if (lastError.message && lastError.message.includes('duplicate')) {
           setError('You are already registered for Quantum.');
         } else {
-          setError(insertError.message);
+          setError(lastError.message || 'Registration failed after multiple attempts. Please try again.');
         }
-        setLoading(false);
-        return;
+      } else {
+        setError('Registration failed. Please try again.');
       }
-
-      navigate('/quimica26/quantum/uid', { replace: true });
     } catch (err) {
+      console.error('Unexpected error:', err);
       setError('Something went wrong. Please try again.');
-      console.error(err);
+    } finally {
+      setLoading(false);
+      submittingRef.current = false;
     }
-
-    setLoading(false);
   };
 
   if (checking) {

@@ -34,9 +34,6 @@ import ForgotPassword from './pages/forgotPassword';
 
 // Protected event pages
 import Quimica26 from './pages/quimica26';
-import QuimiDexterRegister from './pages/quimiDexterRegister';
-import QuimiDexterTeamId from './pages/quimiDexterTeamId';
-import QuimiDexterSubmission from './pages/quimiDexterSubmission';
 import QuantumRegister from './pages/quantumRegister';
 import QuantumUid from './pages/quantumUid';
 
@@ -74,11 +71,8 @@ root.render(
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          {/* Protected — Quimica26 events */}
+          {/* Protected — Quimica26 events (Quantum only) */}
           <Route path="/quimica26" element={<ProtectedRoute><Quimica26 /></ProtectedRoute>} />
-          <Route path="/quimica26/quimi-dexter/register" element={<ProtectedRoute><QuimiDexterRegister /></ProtectedRoute>} />
-          <Route path="/quimica26/quimi-dexter/team-id" element={<ProtectedRoute><QuimiDexterTeamId /></ProtectedRoute>} />
-          <Route path="/quimica26/quimi-dexter/submission" element={<ProtectedRoute><QuimiDexterSubmission /></ProtectedRoute>} />
           <Route path="/quimica26/quantum/register" element={<ProtectedRoute><QuantumRegister /></ProtectedRoute>} />
           <Route path="/quimica26/quantum/uid" element={<ProtectedRoute><QuantumUid /></ProtectedRoute>} />
 
