@@ -152,12 +152,12 @@ const HomePage = () => {
         The Chemical Engineering Society organizes an annual technical
         extravaganza at BIT Sindri.
       </p>
-       <button
+       {/* <button
               className="primary-btn"
               onClick={() => navigate("/register")}
             >
               REGISTER
-            </button>
+            </button> */}
     </div>
   </div>
 </section>
