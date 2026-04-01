@@ -5,6 +5,7 @@ import "../styles/navbar.css";
   const Navbar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
     <div className="home">
@@ -28,8 +29,20 @@ import "../styles/navbar.css";
           <li><NavLink to="/ourTeam">Our Team</NavLink></li>
           <li><NavLink to="/faculty">Faculty</NavLink></li>
           <li><NavLink to="/newsletter">Newsletter</NavLink></li>
-          <li><NavLink to="/gallery">Gallery</NavLink></li>
-          <li><NavLink to="/courseStructure">Course Structure</NavLink></li>
+          {/* <li><NavLink to="/gallery">Gallery</NavLink></li>
+          <li><NavLink to="/courseStructure">Course Structure</NavLink></li> */}
+
+          <li
+  className={`dropdown ${dropdownOpen ? "active" : ""}`}
+  onClick={() => setDropdownOpen(!dropdownOpen)}
+>
+  <span>Others ▾</span>
+
+  <ul className="dropdown-menu">
+    <li><NavLink to="/gallery">Gallery</NavLink></li>
+    <li><NavLink to="/courseStructure">Course Structure</NavLink></li>
+  </ul>
+</li>
         </ul>
       </nav>
     </div>

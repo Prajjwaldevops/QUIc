@@ -6,6 +6,16 @@ import "../styles/homePage.css";
 import Footer from "./footer";
 
 const HomePage = () => {
+
+
+
+
+
+const [dropdownOpen, setDropdownOpen] = useState(false);
+
+
+
+
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -33,8 +43,31 @@ const HomePage = () => {
           <li><NavLink to="/ourTeam">Our Team</NavLink></li>
           <li><NavLink to="/faculty">Faculty</NavLink></li>
           <li><NavLink to="/newsletter">Newsletter</NavLink></li>
-          <li><NavLink to="/gallery">Gallery</NavLink></li>
-          <li><NavLink to="/courseStructure">Course Structure</NavLink></li>
+          {/* <li><NavLink to="/gallery">Gallery</NavLink></li>
+          <li><NavLink to="/courseStructure">Course Structure</NavLink></li> */}
+
+
+
+
+
+
+<li
+  className={`dropdown ${dropdownOpen ? "active" : ""}`}
+  onClick={() => setDropdownOpen(!dropdownOpen)}
+>
+  <span>Others ▾</span>
+
+  <ul className="dropdown-menu">
+    <li><NavLink to="/gallery">Gallery</NavLink></li>
+    <li><NavLink to="/courseStructure">Course Structure</NavLink></li>
+  </ul>
+</li>
+
+
+
+
+
+
         </ul>
       </nav>
 
@@ -127,8 +160,8 @@ const HomePage = () => {
   <div className="event-container">
 
     {/* LEFT SIDE → Poster with border */}
-    <div className="event-poster moving-border-poster">
-      <img src="/assets/quimica2k26.JPG" alt="Quimica 26" />
+    <div className="event-poster featured-poster">
+      <img src="/assets/quimica2k26.jpeg" alt="Quimica 26" />
     </div>
 
     {/* RIGHT SIDE → (optional, if you want same layout) */}

@@ -222,10 +222,10 @@ img {
   justify-content: center;
 }
 
-.featured-event .event-container .event-poster img{
+/* .featured-event .event-container .event-poster img{
     width: 250px;
     height: 250px;
-}
+} */
 
 .featured-event .event-container {
   width: 100%;
@@ -235,11 +235,11 @@ img {
 
 .moving-border-poster {
   position: relative;
-  display: inline-block;
   width: 100%;
-  max-width: 350px;   /* ✅ SAME as .event-poster */
+  max-width: 320px;   /* desktop size */
+   /* 🔥 keeps perfect square */
   border-radius: 15px;
-  overflow: hidden;   /* 🔥 FIX: prevents overflow */
+  overflow: hidden;
 }
 /* DOTTED BORDER */
 .moving-border-poster::before {
@@ -270,15 +270,55 @@ img {
 }
 
 /* IMAGE */
-.moving-border-poster img {
-  display: block;
-  width: 100%;        /* ✅ match container */
-  height: auto;       /* ✅ keep ratio same as event poster */
-  border-radius: 10px;
+/* SAME SIZE AS OTHER EVENTS */
+/* SAME SIZE AS OTHER EVENTS */
+.featured-poster {
   position: relative;
-  z-index: 1;
+  width: 100%;
+  max-width: 350px;   /* ✅ same as others */
+  border-radius: 15px;
+  overflow: hidden;
 }
 
+/* 🔥 SAME MOVING BORDER EFFECT */
+.featured-poster::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 15px;
+  padding: 2px;
+
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 8px,
+    #ff7a00 8px,
+    #ff7a00 12px
+  );
+
+  background-size: 200% 100%;
+
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  animation: flowDots 2s linear infinite;
+
+  z-index: 2; /* 🔥 keep above */
+}
+
+/* IMAGE */
+.featured-poster img {
+  width: 100%;
+  height: auto;       /* ✅ SAME as other posters */
+  display: block;
+  border-radius: 15px;
+  position: relative;
+  padding: 9px;
+  z-index: 1;         /* 🔥 below border */
+}
 /* ANIMATION */
 @keyframes flowDots {
   0% {
@@ -606,5 +646,86 @@ img {
 
   .section-title {
     font-size: 26px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/* ================= DROPDOWN ================= */
+
+.dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+.dropdown span {
+  font-size: 14px;
+  color: white;
+}
+
+/* menu hidden */
+.dropdown-menu {
+  position: absolute;
+  top: 120%;
+ right: 0;
+left: auto;
+  background: #0b0603;
+  border: 1px solid #ff7a00;
+  border-radius: 8px;
+
+  list-style: none;
+  padding: 10px 0;
+  min-width: 180px;
+
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+/* items */
+.dropdown-menu li {
+  padding: 10px 15px;
+}
+
+.dropdown-menu li a {
+  text-decoration: none;
+  color: white;
+  display: block;
+  font-size: 14px;
+}
+
+/* hover effect */
+.dropdown-menu li:hover {
+  background: rgba(255, 122, 0, 0.15);
+}
+
+/* DESKTOP HOVER */
+.dropdown:hover .dropdown-menu {
+  display: flex;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+
+  .dropdown-menu {
+    position: static;
+    border: none;
+    background: transparent;
+    padding: 0;
+  }
+
+  .dropdown-menu li {
+    padding: 10px 0;
+  }
+
+  .dropdown.active .dropdown-menu {
+    display: flex;
   }
 }
