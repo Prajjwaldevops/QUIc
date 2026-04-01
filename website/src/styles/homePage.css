@@ -18,7 +18,7 @@ img {
 /* ================= NAVBAR ================= */
 
 .home .hero {
-  margin-top: 30px;
+  margin-top: 60px;
   padding: 20px;
 }
 
@@ -37,7 +37,6 @@ img {
 
 .home .hero-video {
   position: absolute;
-  margin-top: 70px;
   top: 0;
   left: 0;
 
@@ -95,7 +94,6 @@ img {
     font-size: 40px;
   }
 }
-
 
 .title span {
   background: linear-gradient(
@@ -156,6 +154,7 @@ img {
 
   animation: blinkEffect 1s infinite; /* 🔥 blinking */
 }
+
 @keyframes glowBlink {
   0% {
     box-shadow: 0 0 5px #ff7a00;
@@ -268,6 +267,10 @@ img {
   margin-bottom: 60px;
 }
 
+.featured-event .main-event-container {
+  height: 500px;
+}
+
 .moving-border-poster {
   position: relative;
   width: 100%;
@@ -309,6 +312,7 @@ img {
 /* SAME SIZE AS OTHER EVENTS */
 .featured-poster {
   position: relative;
+  height: 250px;
   width: 100%;
   max-width: 250px;   /* ✅ same as others */
   border-radius: 15px;
@@ -356,7 +360,7 @@ img {
   display: block;
   border-radius: 15px;
   position: relative;
-  padding: 9px;
+  padding: 10px;
   z-index: 1;         /* 🔥 below border */
 }
 
@@ -739,18 +743,37 @@ img {
     font-size: 28px;
   }
 
+  
+.location-tag {
+  position: absolute;
+  bottom: 4px;
+  left: 10px;
+  right: 10px;
+
+  background: rgba(0,0,0,0.9);
+  border: 1px solid #ff7a00;
+  border-radius: 20px;
+
+  padding: 6px 6px;
+  font-size: 9px;
+  text-align: center;
+}
+
   .section-title {
     font-size: 26px;
     margin-bottom: 30px;
   }
 
-.home .featured-event .event-container {
+  .home .featured-event {
+    margin-top: 8px ;
+    margin-left: -60px;
+    margin-right: -60px;
   }
 
   .home .event-container {
     margin-top: 4px ;
-    margin-left: -25px;
-    margin-right: -25px;
+    margin-left: -30px;
+    margin-right: -30px;
     padding: 20px 14px;
     border-radius: 16px;
   }

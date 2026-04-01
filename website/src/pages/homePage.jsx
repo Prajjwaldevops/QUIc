@@ -138,7 +138,7 @@ const HomePage = () => {
 
 
 <section className="featured-event" id="quimica26"> 
-  <div className="event-container">
+  <div className="event-container main-event-container">
 
     {/* LEFT SIDE → Poster with border */}
     <div className="event-poster featured-poster">
