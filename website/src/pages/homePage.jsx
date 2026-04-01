@@ -7,15 +7,7 @@ import Footer from "./footer";
 
 const HomePage = () => {
 
-
-
-
-
-const [dropdownOpen, setDropdownOpen] = useState(false);
-
-
-
-
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -37,7 +29,7 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
         </div>
 
         <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-          <li><a href="#home">Home</a></li>
+          <li><a href="/">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><NavLink to="/events">Events</NavLink></li>
           <li><NavLink to="/ourTeam">Our Team</NavLink></li>
@@ -45,11 +37,6 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
           <li><NavLink to="/newsletter">Newsletter</NavLink></li>
           {/* <li><NavLink to="/gallery">Gallery</NavLink></li>
           <li><NavLink to="/courseStructure">Course Structure</NavLink></li> */}
-
-
-
-
-
 
 <li
   className={`dropdown ${dropdownOpen ? "active" : ""}`}
@@ -62,17 +49,11 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
     <li><NavLink to="/courseStructure">Course Structure</NavLink></li>
   </ul>
 </li>
-
-
-
-
-
-
         </ul>
       </nav>
 
       {/* HERO */}
-<section className="hero" id="home">
+      <section className="hero" id="home">
 
   {/* VIDEO BACKGROUND */}
   <video className="hero-video" autoPlay loop muted>
@@ -88,7 +69,7 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
       document.getElementById("quimica26").scrollIntoView({ behavior: "smooth" });
     }}
   >
-    Live Events
+    <p>Live Events</p>
   </button>
 </div>
 
@@ -118,7 +99,7 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
       </div>
     </div>
   </div>
-</section>
+      </section>
 
       {/* ABOUT */}
       <section className="about" id="about">
@@ -178,7 +159,6 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
               REGISTER
             </button>
     </div>
- 
   </div>
 </section>
 

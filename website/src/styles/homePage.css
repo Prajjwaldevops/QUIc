@@ -17,35 +17,45 @@ img {
 
 /* ================= NAVBAR ================= */
 
-.hero {
-  position: relative;
-  overflow: hidden;
-  height: 150vh;   /* 🔥 FORCE HEIGHT */
-
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 50px;
-  flex-wrap: wrap;
-
-  padding: 70px 80px;
+.home .hero {
+  margin-top: 60px;
+  padding: 20px;
 }
 
-.hero-video {
+.home .hero .hero-content .bit-pill {
+  font-size: 1.2rem;
+}
+
+.home .hero .hero-content .title {
+  font-size: 2 rem;
+  letter-spacing: 12px; 
+}
+
+.home .hero .hero-content .society-pill {
+  font-size: 1.2rem;
+}
+
+.home .hero-video {
   position: absolute;
   top: 0;
   left: 0;
+
   width: 100%;
   height: 100%;
-  object-fit: cover;        /* fill hero section */
-  z-index: 0;               /* behind content */
-  filter: brightness(0.4);  /* darken for readability */
+
+  object-fit: cover;
+  object-position: center 35%; /* 🔥 important */
+
+  z-index: 0;
+  filter: brightness(0.4);
 }
 
-.hero-content {
+.home .hero .hero-content {
   position: relative;
   z-index: 1;               /* on top of video */
   display: flex;
+  margin-top: 30px;
+  margin-left: 20px;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
@@ -53,10 +63,32 @@ img {
 
 /* Optional: adjust for mobile */
 @media (max-width: 768px) {
-  .hero {
-    padding: 40px 20px;
-    min-height: 60vh;
+  .home .hero {
+    height: 100vh;
+    min-height: 100vh;
+
+    padding: 20px;
+    align-items: center;
   }
+
+  .home .hero .hero-content {
+    margin-top: 30px;
+    margin-left: 20px;
+  }
+
+  .home .hero .hero-content .bit-pill {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+  .home .hero .hero-content .title {
+  font-size: 1.1 rem;
+  letter-spacing: 10px; 
+}
+
+  .home .hero .hero-content .society-pill {
+  font-size: 1rem;
+}
 
   .title {
     font-size: 40px;
@@ -84,17 +116,23 @@ img {
   position: absolute;
   bottom: 20px;
   right: 30px;
+  margin-bottom: 40px;
   z-index: 2; /* above video */
 }
 
-.video-btn button {
+.home.video-btn button {
   background: #ff7a00;
   color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: 0.3s;
+}
+
+.video-btn button p{
+  color: white;
+  font-size: 1.4rem;
 }
 
 .video-btn button:hover {
@@ -135,10 +173,6 @@ img {
 .video-btn button {
   animation: glowBlink 1.2s infinite;
 }
-
-
-
-
 
 
 .navbar {
@@ -275,9 +309,14 @@ img {
 .featured-poster {
   position: relative;
   width: 100%;
-  max-width: 350px;   /* ✅ same as others */
+  max-width: 250px;   /* ✅ same as others */
   border-radius: 15px;
   overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.featured-poster:hover {
+  transform: rotateX(1deg) scale(1.03);
 }
 
 /* 🔥 SAME MOVING BORDER EFFECT */
@@ -319,6 +358,7 @@ img {
   padding: 9px;
   z-index: 1;         /* 🔥 below border */
 }
+
 /* ANIMATION */
 @keyframes flowDots {
   0% {
@@ -328,12 +368,6 @@ img {
     background-position: 200% 0;
   }
 }
-
-
-
-
-
-
 
 
 
@@ -416,12 +450,13 @@ img {
   padding: 12px 28px;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.25s ease;
 }
 
 .primary-btn:hover {
   background: #ffa347;
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(255, 122, 0, 0.3);
 }
 
 .signin-btn {
@@ -433,17 +468,6 @@ img {
 .signin-btn:hover {
   background: rgba(255, 122, 0, 0.1);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /* ================= POSTER ================= */
 .poster-box {
@@ -465,6 +489,7 @@ img {
 
 /* ================= ABOUT ================= */
 .about {
+  margin-top: 15%;
   padding: 80px;
 }
 
@@ -474,6 +499,7 @@ img {
   color: #ff7a00;
   margin-bottom: 50px;
 }
+
 
 .about-container {
   display: flex;
@@ -493,6 +519,7 @@ img {
   border-radius: 20px;
   overflow: hidden;
   padding: 0;
+  transition: all 0.3s ease;
 }
 
 .about-img-box img {
@@ -504,52 +531,102 @@ img {
 .about-text-box {
   flex: 1.3;
   max-width: 500px;
-  background: black;
+  
+  background: rgba(0, 0, 0, 0.85);
   border: 2px solid #ff7a00;
   border-radius: 20px;
-  padding: 20px;
+
+  padding: 20px 18px;
+
+  /* Typography magic */
+  font-size: 15.5px;
+  line-height: 1.7;
+  letter-spacing: 0.3px;
+  color: #eaeaea;
+
+  /* THIS fixes ugly spacing */
+  text-align: justify;
+
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px); /* 🔥 glass effect */
+
+  /* Smooth feel */
+  box-shadow: 0 0 15px rgba(255, 122, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* Paragraph spacing */
+.about-text-box p {
+  margin-bottom: 14px;
+}
+
+/* Remove last paragraph extra space */
+.about-text-box p:last-child {
+  margin-bottom: 0;
+}
+
+/* Hover glow (optional but sexy) */
+.about-text-box:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 25px rgba(255, 122, 0, 0.25);
 }
 
 .location-tag {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: black;
-  color: #fff;
-  padding: 12px;
-  font-size: 14px;
-  text-align: center;
-  border-top: 1px solid #ff7a00;
-}
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
 
-.location-tag {
-  margin-top: 15px;
-  padding: 3px;
+  background: rgba(0,0,0,0.9);
   border: 1px solid #ff7a00;
   border-radius: 20px;
+
+  padding: 6px 10px;
+  font-size: 13px;
   text-align: center;
-  margin-bottom: 5px;
 }
 
 /* ================= EVENTS ================= */
 .events {
+  margin-top: 15% ;
   padding: 80px;
 }
 
 .event-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 50px;
-  margin-bottom: 60px;
+
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 30px;
+
+  border-radius: 20px;
+
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 10px 40px rgba(255, 122, 0, 0.08);
+
+  transition: 0.3s ease;
+}
+
+.event-poster {
+  flex-shrink: 0;
+  display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .event-poster img {
-  max-width: 350px;
-  width: 100%;
-  border-radius: 15px;
+  width: 260px;
+  border-radius: 12px;
+  transition: 0.4s ease;
+}
+
+.event-poster:hover img {
+  transform: scale(1.05);
 }
 
 .event-details {
@@ -572,6 +649,10 @@ img {
 @media (max-width: 768px) {
   .menu-icon {
     display: block;
+  }
+
+  .about {
+    padding: 40px 12px; /* 👈 reduce side space */
   }
 
   .nav-links {
@@ -598,6 +679,19 @@ img {
   .footer {
     flex-direction: column;
     text-align: center;
+  }
+
+  .about-container {
+    flex-direction: column;
+    gap: 30px;
+    padding: 25px 18px;
+    margin: 50px 12px; /* 🔥 less side space */
+  }
+
+  .about-text-box {
+    margin: 0;
+    padding: 16px 14px;
+    text-align: left;
   }
 
   .hero {
@@ -646,16 +740,24 @@ img {
 
   .section-title {
     font-size: 26px;
+    margin-bottom: 30px;
+  }
+
+.home .featured-event .event-container {
+  }
+
+  .home .event-container {
+    margin-top: 4px ;
+    margin-left: -25px;
+    margin-right: -25px;
+    padding: 20px 14px;
+    border-radius: 16px;
+  }
+
+  .event-poster img {
+    width: 180px;
   }
 }
-
-
-
-
-
-
-
-
 
 
 /* ================= DROPDOWN ================= */
